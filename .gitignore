@@ -32,8 +32,8 @@ backend/build/
 # External repositories (large source targets for analysis)
 external/
 
-# Generated vault output (Obsidian notes produced by the pipeline)
-vault/
+# Generated vault output — examples are committed; add your own to vault/
+# vault/
 
 # Jupyter
 .ipynb_checkpoints/
