@@ -1,0 +1,39 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build artifacts
+build/
+backend/build/
+
+# External repositories (large source targets for analysis)
+external/
+
+# Generated vault output (Obsidian notes produced by the pipeline)
+vault/
+
+# Jupyter
+.ipynb_checkpoints/
