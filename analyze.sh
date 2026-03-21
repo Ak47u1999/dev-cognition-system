@@ -19,5 +19,6 @@ fi
 exec python3 backend/batch_pipeline.py \
     --repo external/llama.cpp \
     --vault ./vault \
+    --workers 1 \
     --skip-existing \
     "$@"

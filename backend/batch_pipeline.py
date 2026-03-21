@@ -136,8 +136,8 @@ def main():
     p.add_argument("--vault", "-v",
                    default=os.getenv("VAULT_PATH", os.path.join(os.getcwd(), "vault")),
                    help="Obsidian vault output directory")
-    p.add_argument("--workers", "-w", type=int, default=5,
-                   help="Number of concurrent Groq workers (default: 5)")
+    p.add_argument("--workers", "-w", type=int, default=1,
+                   help="Number of concurrent Groq workers (default: 1; rate-lock serialises anyway)")
     p.add_argument("--no-groq", action="store_true", help="Save prompts only, skip Groq calls")
     p.add_argument("--skip-existing", action="store_true", default=True,
                    help="Skip functions already saved to vault (default: True)")
