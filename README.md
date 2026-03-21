@@ -127,7 +127,7 @@ dev-cognition-system/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/dev-cognition-system.git
+git clone https://github.com/Ak47u1999/dev-cognition-system.git
 cd dev-cognition-system
 ```
 
