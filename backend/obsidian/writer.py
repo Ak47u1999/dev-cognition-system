@@ -10,18 +10,24 @@ def _ensure_vault(path: str):
     return path
 
 
-def _sanitize_title(title: str) -> str:
+def sanitize_title(title: str) -> str:
     title = title.replace("::", "__")
     title = re.sub(r'[\\/*?:"<>|]', '', title)
     title = title.strip()
     return title
 
+# Keep private alias for backward compatibility
+_sanitize_title = sanitize_title
 
-def save_note(title: str, content: str, vault_path: str = None) -> str:
+
+def save_note(title: str, content: str, vault_path: str = None,
+              skip_if_exists: bool = False) -> str:
     vault_path = vault_path or VAULT_PATH
     _ensure_vault(vault_path)
-    title = _sanitize_title(title)
+    title = sanitize_title(title)
     filename = os.path.join(vault_path, f"{title}.md")
+    if skip_if_exists and os.path.exists(filename):
+        return filename
     with open(filename, "w", encoding="utf-8") as f:
         f.write(f"# {title}\n\n")
         f.write(content)

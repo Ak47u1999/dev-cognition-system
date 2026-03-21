@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from ai.groq_client import query_groq
 from ai.prompts import build_prompt
 from ai.tagger import tag_code
-from obsidian.writer import save_note
+from obsidian.writer import save_note, sanitize_title
 
 _print_lock = threading.Lock()
 _counter_lock = threading.Lock()
@@ -47,7 +47,8 @@ def _increment_done():
 
 
 def find_c_files(repo_path: str, skip_dirs: set = None) -> list:
-    skip_dirs = skip_dirs or {"build", ".git", "tests", "test", "examples", "ci", "docs", "scripts"}
+    # Only skip non-source directories; include tests, examples, etc.
+    skip_dirs = skip_dirs or {".git", "build"}
     c_files = []
     for root, dirs, files in os.walk(repo_path):
         dirs[:] = [d for d in dirs if d not in skip_dirs]
@@ -82,8 +83,7 @@ def process_function(source_path: str, fn: dict, index: int,
     title = f"{basename}::{label}"
 
     if skip_existing:
-        safe = re.sub(r"[^\w\-]", "_", title)
-        candidate = os.path.join(file_vault, safe + ".md")
+        candidate = os.path.join(file_vault, sanitize_title(title) + ".md")
         if os.path.exists(candidate):
             done = _increment_done()
             _log(f"[{done}/{_total}] SKIP {title}")

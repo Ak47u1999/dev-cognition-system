@@ -11,7 +11,7 @@ load_dotenv()
 from ai.groq_client import query_groq
 from ai.prompts import build_prompt
 from ai.tagger import tag_code
-from obsidian.writer import save_note
+from obsidian.writer import save_note, sanitize_title
 from parser.extractor import extract_functions_from_source_bytes
 
 
@@ -44,7 +44,7 @@ def analyze_file(source_path: str, vault_path: str, use_groq: bool = True,
         title = f"{basename}::{label}"
 
         if skip_existing:
-            candidate = os.path.join(file_vault, re.sub(r'[^\w\-]', '_', title) + ".md")
+            candidate = os.path.join(file_vault, sanitize_title(title) + ".md")
             if os.path.exists(candidate):
                 continue
 
@@ -82,7 +82,9 @@ def main():
     p.add_argument("--vault", "-v", default=os.getenv("VAULT_PATH", os.path.join(os.getcwd(), "vault")), help="Obsidian vault path")
     p.add_argument("--no-groq", action="store_true", help="Do not call Groq; save prompts instead")
     p.add_argument("--max", type=int, help="Max functions to process")
-    p.add_argument("--skip-existing", action="store_true", help="Skip functions already saved to vault")
+    p.add_argument("--skip-existing", action="store_true", default=True, help="Skip functions already saved to vault (default: True)")
+    p.add_argument("--no-skip", dest="skip_existing", action="store_false",
+                   help="Re-analyze even if note already exists")
     args = p.parse_args()
     analyze_file(args.source, args.vault, use_groq=not args.no_groq, max_functions=args.max, skip_existing=args.skip_existing)
 
