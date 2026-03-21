@@ -84,22 +84,28 @@ C/C++ Source Repo
 
 ```
 dev-cognition-system/
-├── .env.example              # Environment variable template
+├── init.sh                   # ★ Start here — apt bootstrap, venv setup, then calls analyze.sh
+├── analyze.sh                # Activates venv and launches batch_pipeline.py
+├── .env.example              # Environment variable template (copy to .env)
 ├── requirements.txt          # Python dependencies
 ├── backend/
-│   ├── main.py               # Single-file analyzer (entry point)
-│   ├── pipeline.py           # Alternative pipeline implementation
-│   ├── batch_pipeline.py     # Multi-threaded batch analyzer (main entry point)
-│   ├── sample.c              # Sample C file for testing
+│   ├── batch_pipeline.py     # Multi-threaded batch analyzer (called by analyze.sh)
+│   ├── pipeline.py           # Single-file pipeline (for manual/dev use)
+│   ├── main.py               # Minimal single-file entry point (dev/testing)
+│   ├── sample.c              # Sample C file for testing the parser
 │   ├── ai/
 │   │   ├── groq_client.py    # Groq API client (rate limiting, retries, fallback)
 │   │   ├── prompts.py        # LLM prompt templates
 │   │   └── tagger.py         # Heuristic code tagger
 │   ├── parser/
-│   │   ├── parser.py         # Tree-Sitter C parser wrapper
+│   │   ├── parser.py         # Tree-Sitter C/C++ parser wrapper
 │   │   └── extractor.py      # Function extraction logic
-│   └── obsidian/
-│       └── writer.py         # Markdown note writer
+│   ├── obsidian/
+│   │   └── writer.py         # Markdown note writer
+│   ├── api/                  # (planned) REST API layer
+│   ├── chunker/              # (planned) semantic chunking module
+│   ├── graph/                # (planned) call-graph analysis
+│   └── build/                # (planned) build-system integration
 ├── vault/                    # Generated output (gitignored — see below)
 └── external/                 # Source repos to analyze (gitignored)
 ```
