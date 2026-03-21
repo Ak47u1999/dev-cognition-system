@@ -354,4 +354,71 @@ backend/
 
 ---
 
+## ⚡ Running the Pipeline — Commands & Expected Output
+
+### Quick test (single file)
+
+```bash
+cd dev-cognition-system
+source venv/bin/activate   # Windows: venv\Scripts\activate
+
+python backend/main.py \
+  --source backend/sample.c \
+  --vault ./vault \
+  --skip-existing
+```
+
+### Full batch run (entire repository)
+
+```bash
+python backend/batch_pipeline.py \
+  --repo external/llama.cpp \
+  --vault ./vault \
+  --workers 1 \
+  --skip-existing
+```
+
+> **Tip:** Use `--workers 1` on the free tier. Multiple workers won't help when the rate limiter serialises calls, and concurrent requests risk bursting the quota.
+
+---
+
+### 📺 Terminal output
+
+```
+Scanning 178 C files...
+Found 8432 functions across 178 files
+Vault: ./vault | Workers: 1 | Skip existing: True
+
+[1/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_tallocr_alloc.md
+[2/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_dyn_tallocr_new.md
+[3/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_vbuffer_alloc.md
+...
+[429 rate limit] Backing off 10.0s (attempt 2/6)...
+[4/8432]    Saved vault/quants/quants.c__ggml_vec_dot_q4_0_q8_0.md
+...
+Done. 8432 new notes saved to ./vault
+```
+
+---
+
+### 🕐 Rate limit guide
+
+The Groq free tier allows **~30 requests/minute**. The `GROQ_MIN_INTERVAL` env var controls the delay between calls.
+
+| `GROQ_MIN_INTERVAL` | Req / min | Req / hr | Time for ~8 400 functions | Safe? |
+|:-------------------:|:---------:|:--------:|:-------------------------:|:-----:|
+| `2.5s` | 24 | 1 440 | ~6 hrs | ⚠️ Hits limit |
+| **`6s` ← default** | **10** | **600** | **~14 hrs** | ✅ Recommended |
+| `10s` | 6 | 360 | ~23 hrs | ✅ Very safe |
+
+Set your preferred interval in `.env`:
+
+```env
+GROQ_MIN_INTERVAL=6   # 10 req/min — safe overnight run
+```
+
+> Run it before you sleep — wake up to a fully annotated codebase. 🌙
+
+---
+
 *Built with [Groq](https://groq.com) · [Tree-Sitter](https://tree-sitter.github.io) · [Obsidian](https://obsidian.md)*
