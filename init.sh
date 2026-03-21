@@ -28,6 +28,24 @@ success() { echo -e "\033[1;32m[init]\033[0m $*"; }
 warn()    { echo -e "\033[1;33m[init]\033[0m $*"; }
 die()     { echo -e "\033[1;31m[init]\033[0m ERROR: $*" >&2; exit 1; }
 
+# ── 0. System dependencies (Debian/Ubuntu only) ──────────────────────────────
+if command -v apt-get &>/dev/null; then
+    PKGS_NEEDED=()
+    command -v python3   &>/dev/null || PKGS_NEEDED+=(python3)
+    command -v git       &>/dev/null || PKGS_NEEDED+=(git)
+    python3 -m venv --help &>/dev/null 2>&1 || PKGS_NEEDED+=(python3-venv)
+    python3 -m pip  --version &>/dev/null 2>&1 || PKGS_NEEDED+=(python3-pip)
+
+    if [ ${#PKGS_NEEDED[@]} -gt 0 ]; then
+        info "Installing system packages: ${PKGS_NEEDED[*]}"
+        sudo apt-get update -y -qq
+        sudo apt-get install -y -qq "${PKGS_NEEDED[@]}"
+        success "System packages installed."
+    else
+        info "System packages already present, skipping apt."
+    fi
+fi
+
 # ── 1. Python 3 check ─────────────────────────────────────────────────────────
 info "Checking Python 3..."
 PYTHON=$(command -v python3 || command -v python || true)
