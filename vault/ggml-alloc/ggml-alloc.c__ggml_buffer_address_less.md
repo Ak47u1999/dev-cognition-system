@@ -4,23 +4,23 @@ Tags: #ggml
 
 ```json
 {
-  "title": "Buffer Address Comparison",
-  "summary": "Compares two buffer addresses based on their chunk and offset.",
-  "details": "This function compares two buffer addresses, `a` and `b`, and returns a boolean indicating whether `a` is less than `b`. The comparison is done first by comparing the chunk of the two addresses. If the chunks are different, the function returns whether `a.chunk` is less than `b.chunk`. Otherwise, it compares the offset of the two addresses.",
-  "rationale": "The function is implemented this way to allow for efficient comparison of buffer addresses. By comparing the chunk first, it reduces the number of comparisons needed when the chunks are different.",
+  "title": "Buffer Address Comparison Function",
+  "summary": "Compares two buffer addresses based on their chunk and offset values.",
+  "details": "This function takes two `struct buffer_address` objects as input and returns a boolean indicating whether the first address is less than the second. The comparison is done in two steps: first, it checks if the chunk values are different. If they are, it compares the chunk values. If the chunk values are the same, it compares the offset values.",
+  "rationale": "This implementation is likely used to maintain a sorted list of buffer addresses, where each address is represented by a chunk and an offset. By comparing the chunk values first, the function can quickly determine if two addresses belong to different chunks, avoiding unnecessary offset comparisons.",
   "performance": "This function has a time complexity of O(1), making it efficient for large datasets.",
   "hidden_insights": [
     "The function uses a ternary operator to concisely express the comparison logic.",
-    "The comparison is done in a way that minimizes the number of comparisons needed."
+    "The comparison is done in a way that minimizes the number of offset comparisons, making it efficient for large datasets."
   ],
   "where_used": [
-    "ggml-alloc.c"
+    "Buffer management code",
+    "Memory allocation algorithms"
   ],
   "tags": [
-    "buffer",
-    "address",
-    "comparison",
-    "sorting"
+    "buffer management",
+    "memory allocation",
+    "comparison function"
   ],
-  "markdown": "### Buffer Address Comparison\n\nThis function compares two buffer addresses based on their chunk and offset.\n\n#### Implementation\n\n```c\nstatic bool ggml_buffer_address_less(struct buffer_address a, struct buffer_address b) {\n    return a.chunk != b.chunk ? a.chunk < b.chunk : a.offset < b.offset;\n}\n```\n\n#### Rationale\n\nThe function is implemented this way to allow for efficient comparison of buffer addresses. By comparing the chunk first, it reduces the number of comparisons needed when the chunks are different.\n\n#### Performance\n\nThis function has a time complexity of O(1), making it efficient for large datasets.\n\n#### Hidden Insights\n\n* The function uses a ternary operator to concisely express the comparison logic.\n* The comparison is done in a way that minimizes the number of comparisons needed.\n\n#### Where Used\n\n* `ggml-alloc.c`\n\n#### Tags\n\n* buffer\n* address\n* comparison\n* sorting"
+  "markdown": "### Buffer Address Comparison Function\n\nThis function compares two buffer addresses based on their chunk and offset values.\n\n#### Purpose\n\nThe purpose of this function is to maintain a sorted list of buffer addresses, where each address is represented by a chunk and an offset.\n\n#### Implementation\n\nThe function takes two `struct buffer_address` objects as input and returns a boolean indicating whether the first address is less than the second. The comparison is done in two steps: first, it checks if the chunk values are different. If they are, it compares the chunk values. If the chunk values are the same, it compares the offset values.\n\n#### Performance Considerations\n\nThis function has a time complexity of O(1), making it efficient for large datasets.\n\n#### Example Use Cases\n\nThis function is likely used in buffer management code and memory allocation algorithms."
 }

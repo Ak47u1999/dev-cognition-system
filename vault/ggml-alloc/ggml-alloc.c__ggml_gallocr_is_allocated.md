@@ -15,13 +15,12 @@ Tags: #ggml
   ],
   "where_used": [
     "ggml_gallocr.c",
-    "tensor.c"
+    "ggml_tensor.c"
   ],
   "tags": [
     "tensor",
-    "galloc",
     "allocation",
-    "memory management"
+    "galloc"
   ],
   "markdown": "### ggml_gallocr_is_allocated
 Checks if a tensor is allocated or will be allocated by a galloc.
@@ -31,7 +30,8 @@ This function determines whether a tensor is already allocated or will be alloca
 The function checks if the tensor's data is set, if it's on an external buffer, or if it will be allocated by the galloc.
 #### Performance
 The function has a time complexity of O(1), making it efficient for frequent use.
-#### Notes
+#### Assumptions
 The function assumes that the tensor's data is set externally, which may not always be the case.
-The function does not check if the tensor's buffer is valid or if the galloc is valid."
+#### Usage
+This function is likely used in the `ggml_gallocr.c` and `ggml_tensor.c` modules."
 }
