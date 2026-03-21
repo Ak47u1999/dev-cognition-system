@@ -173,7 +173,7 @@ All settings live in `.env`. Copy `.env.example` to get started.
 | `GROQ_API_KEY` | *(required)* | Your Groq API key from [console.groq.com](https://console.groq.com) |
 | `GROQ_MODEL` | `llama-3.1-8b-instant` | LLM model to use for analysis |
 | `GROQ_URL` | `https://api.groq.com/openai/v1/chat/completions` | API endpoint (change for proxy setups) |
-| `GROQ_MIN_INTERVAL` | `2.5` | Minimum seconds between API calls (free-tier safe) |
+| `GROQ_MIN_INTERVAL` | `12` | Minimum seconds between API calls (free-tier safe) |
 | `VAULT_PATH` | `./vault` | Output directory for generated Obsidian notes |
 | `MOCK_GROQ` | `0` | Set to `1` to use heuristic fallback (no API calls) |
 
@@ -408,13 +408,14 @@ The Groq free tier allows **~30 requests/minute**. The `GROQ_MIN_INTERVAL` env v
 | `GROQ_MIN_INTERVAL` | Req / min | Req / hr | Time for ~8 400 functions | Safe? |
 |:-------------------:|:---------:|:--------:|:-------------------------:|:-----:|
 | `2.5s` | 24 | 1 440 | ~6 hrs | ⚠️ Hits limit |
-| **`6s` ← default** | **10** | **600** | **~14 hrs** | ✅ Recommended |
-| `10s` | 6 | 360 | ~23 hrs | ✅ Very safe |
+| `6s` | 10 | 600 | ~14 hrs | ⚠️ Marginal |
+| `10s` | 6 | 360 | ~23 hrs | ✅ Safe |
+| **`12s` ← default** | **5** | **300** | **~28 hrs** | ✅ Recommended |
 
 Set your preferred interval in `.env`:
 
 ```env
-GROQ_MIN_INTERVAL=6   # 10 req/min — safe overnight run
+GROQ_MIN_INTERVAL=12   # 5 req/min — safe overnight run
 ```
 
 > Run it before you sleep — wake up to a fully annotated codebase. 🌙

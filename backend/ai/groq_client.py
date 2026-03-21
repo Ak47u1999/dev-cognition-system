@@ -17,7 +17,7 @@ _RETRY_BASE = 5.0  # seconds base for exponential backoff on 429
 # Global rate limiter: enforce minimum interval between API calls across all threads
 # llama-3.1-8b-instant free tier: ~30 req/min → 1 req per 2.5s to be safe
 _RATE_LOCK = threading.Lock()
-_MIN_INTERVAL = float(os.getenv("GROQ_MIN_INTERVAL", "2.5"))
+_MIN_INTERVAL = float(os.getenv("GROQ_MIN_INTERVAL", "12"))
 _last_call_time: float = 0.0
 
 
