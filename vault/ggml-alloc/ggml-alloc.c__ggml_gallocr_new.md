@@ -18,7 +18,7 @@ Tags: #ggml #memory
   ],
   "tags": [
     "memory allocation",
-    "buffer management",
-    "ggml library"
+    "buffer",
+    "ggml"
   ],
-  "markdown": "# ggml_gallocr_new\n\nCreates a new ggml_gallocr_t instance with a single buffer.\n\n## Details\n\nThis function creates a new instance of ggml_gallocr_t, a memory allocation context, and initializes it with a single buffer of type ggml_backend_buffer_type_t. The buffer is passed as a pointer to the function ggml_gallocr_new_n.\n\n## Performance\n\nThe performance impact of this function is likely minimal, as it simply calls another function with a single argument.\n\n## Where Used\n\n* ggml_gallocr.c\n* ggml_backend.c\n\n## Tags\n\n* memory allocation\n* buffer management\n* ggml library"
+  "markdown": "# ggml_gallocr_new\n\nCreates a new ggml_gallocr_t instance with a single buffer.\n\n## Details\n\nThis function creates a new instance of ggml_gallocr_t, a memory allocation context, and initializes it with a single buffer of type ggml_backend_buffer_type_t. The buffer is passed as a pointer to the function ggml_gallocr_new_n.\n\n## Performance\n\nThe performance impact of this function is likely minimal, as it simply calls another function with a single argument.\n\n## Where Used\n\n* ggml_gallocr.c\n* ggml_backend.c\n\n## Tags\n\n* memory allocation\n* buffer\n* ggml"
