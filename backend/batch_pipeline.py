@@ -52,7 +52,7 @@ def find_c_files(repo_path: str, skip_dirs: set = None) -> list:
     for root, dirs, files in os.walk(repo_path):
         dirs[:] = [d for d in dirs if d not in skip_dirs]
         for f in files:
-            if f.endswith(".c"):
+            if f.endswith(".c") or f.endswith(".cpp"):
                 c_files.append(os.path.join(root, f))
     return sorted(c_files)
 
@@ -147,11 +147,11 @@ def main():
 
     c_files = find_c_files(args.repo)
     if not c_files:
-        print(f"No .c files found under {args.repo}")
+        print(f"No .c / .cpp files found under {args.repo}")
         sys.exit(1)
 
     # Pre-count total functions
-    print(f"Scanning {len(c_files)} C files...")
+    print(f"Scanning {len(c_files)} C/C++ files...")
     all_tasks = []
     for path in c_files:
         funcs = extract_functions_from_file(path)
