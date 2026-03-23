@@ -34,7 +34,7 @@ static int common_download_file_single_online(const std::string & url, const std
 ```
 ### Parameters
 * `url`: The URL of the file to download.
-* `path`: The path where the file will be saved.
+* `path`: The path to save the file to.
 * `bearer_token`: An optional bearer token to include in the HTTP request.
 * `custom_headers`: An optional list of custom HTTP headers to include in the request.
 

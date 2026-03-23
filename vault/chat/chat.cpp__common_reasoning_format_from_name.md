@@ -11,7 +11,7 @@
     "The function uses a throw statement to handle unknown format names, which can be a good practice for error handling in C++."
   ],
   "where_used": [
-    "This function is likely used in modules that require common reasoning formats, such as reasoning engines or data processing pipelines."
+    "This function is likely used in modules that require common reasoning formats, such as reasoning engines or knowledge graph builders."
   ],
   "tags": [
     "C++",

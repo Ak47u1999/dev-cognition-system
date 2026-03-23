@@ -4,39 +4,41 @@ Tags: #ggml #loop
 
 ```json
 {
-  "title": "Dot Product of IQ4 and Q8 Vectors",
-  "summary": "This function computes the dot product of two vectors, one of IQ4 type and the other of Q8 type, with a given number of elements.",
-  "details": "The function takes in several parameters, including the number of elements (n), the IQ4 and Q8 vectors (vx and vy), and the block sizes (bx and by). It uses SIMD instructions to optimize the computation for LoongArch architecture. The function first checks if the number of elements is a multiple of QK4_NL and asserts that QK4_NL is equal to QK8_0. It then initializes several variables and loops through the elements of the vectors, computing the dot product using SIMD instructions. Finally, it sums up the results and stores the final value in the output array (s).",
-  "rationale": "The function is implemented using SIMD instructions to take advantage of the LoongArch architecture's capabilities. This allows for significant performance improvements compared to a naive implementation.",
-  "performance": "The function uses SIMD instructions to optimize the computation, which can result in significant performance improvements. However, the performance may vary depending on the specific hardware and the size of the input vectors.",
+  "title": "ggml_vec_dot_iq4_nl_q8_0",
+  "summary": "Computes the dot product of two vectors, x and y, with a specific data type and size.",
+  "details": "This function calculates the dot product of two vectors, x and y, where x is of type block_iq4_nl and y is of type block_q8_0. The function uses SIMD instructions to optimize performance. It first checks if the input size n is a multiple of QK4_NL, and if not, it asserts an error. The function then iterates over the input vectors, performing the dot product calculation for each pair of elements. The result is stored in the output vector s.",
+  "rationale": "The function is implemented using SIMD instructions to take advantage of the ARM NEON architecture. This allows for significant performance improvements compared to a non-SIMD implementation.",
+  "performance": "The function uses SIMD instructions to perform the dot product calculation, which results in a significant performance improvement. However, the function also has some overhead due to the use of static assertions and the need to check for errors.",
   "hidden_insights": [
-    "The function uses a static assertion to check if QK4_NL is equal to QK8_0, which suggests that these constants are related to the architecture or the specific use case.",
-    "The function uses a loop unrolling technique to improve performance, which is a common optimization technique in numerical computations."
+    "The function uses a lookup table to perform the dot product calculation, which is a common technique in signal processing.",
+    "The function uses the ARM NEON architecture to perform the dot product calculation, which is a specific feature of the ARM processor family."
   ],
   "where_used": [
-    "This function is likely used in a larger program that performs numerical computations, possibly in a machine learning or scientific computing context."
+    "This function is likely used in a signal processing or machine learning application, where the dot product of two vectors is a common operation."
   ],
   "tags": [
     "SIMD",
-    "LoongArch",
+    "ARM NEON",
     "dot product",
-    "numerical computation"
+    "signal processing",
+    "machine learning"
   ],
-  "markdown": "### Dot Product of IQ4 and Q8 Vectors
-This function computes the dot product of two vectors, one of IQ4 type and the other of Q8 type, with a given number of elements.
+  "markdown": "### ggml_vec_dot_iq4_nl_q8_0
+Computes the dot product of two vectors, x and y, with a specific data type and size.
 
 #### Parameters
-* `n`: the number of elements in the vectors
-* `vx`: the IQ4 vector
-* `vy`: the Q8 vector
-* `bx` and `by`: the block sizes
+* `n`: The size of the input vectors.
+* `s`: The output vector.
+* `vx`: The input vector x.
+* `vy`: The input vector y.
+* `nrc`: The number of rows in the input vectors (currently unused).
 
-#### Implementation
-The function uses SIMD instructions to optimize the computation for LoongArch architecture. It first checks if the number of elements is a multiple of QK4_NL and asserts that QK4_NL is equal to QK8_0. It then initializes several variables and loops through the elements of the vectors, computing the dot product using SIMD instructions. Finally, it sums up the results and stores the final value in the output array (s).
+#### Description
+This function calculates the dot product of two vectors, x and y, where x is of type block_iq4_nl and y is of type block_q8_0. The function uses SIMD instructions to optimize performance.
 
 #### Performance
-The function uses SIMD instructions to optimize the computation, which can result in significant performance improvements. However, the performance may vary depending on the specific hardware and the size of the input vectors.
+The function uses SIMD instructions to perform the dot product calculation, which results in a significant performance improvement. However, the function also has some overhead due to the use of static assertions and the need to check for errors.
 
-#### Hidden Insights
-* The function uses a static assertion to check if QK4_NL is equal to QK8_0, which suggests that these constants are related to the architecture or the specific use case.
-* The function uses a loop unrolling technique to improve performance, which is a common optimization technique in numerical computations."
+#### Implementation
+The function is implemented using SIMD instructions to take advantage of the ARM NEON architecture. This allows for significant performance improvements compared to a non-SIMD implementation."
+}

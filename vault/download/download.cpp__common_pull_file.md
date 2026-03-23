@@ -29,7 +29,7 @@ Downloads a file from a server, handling partial content and progress updates.
 * `cli`: `httplib::Client` object
 * `resolve_path`: path to the file on the server
 * `path_tmp`: path to the temporary file
-* `supports_ranges`: whether the server supports partial content
+* `supports_ranges`: whether the server supports range requests
 * `existing_size`: size of the file that already exists
 * `total_size`: total size of the file
 

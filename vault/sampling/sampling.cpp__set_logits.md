@@ -2,41 +2,12 @@
 
 Tags: #ggml #loop #recursion
 
-```json
-{
-  "title": "Common Sampler",
-  "summary": "The common sampler is a struct that holds various parameters and samplers for language model generation. It provides methods for resetting the sampler, setting logits, and measuring time.",
-  "details": "The common sampler is a key component in the language model generation process. It holds various parameters and samplers that are used to generate text. The sampler can be reset, and logits can be set using the `set_logits` method. The `tm` method returns a time measurement object.",
-  "rationale": "The common sampler is implemented as a struct to encapsulate the various parameters and samplers. This allows for easy access and modification of these parameters. The use of a struct also makes the code more organized and easier to understand.",
-  "performance": "The performance of the common sampler is not explicitly optimized. However, the use of a ring buffer and a vector for storing tokens suggests that the sampler is designed for efficient memory usage and fast access to tokens.",
-  "hidden_insights": [
-    "The common sampler uses a ring buffer to store previous tokens, which allows for efficient access to these tokens.",
-    "The sampler uses a vector to store the current tokens, which allows for fast insertion and removal of tokens."
-  ],
-  "where_used": [
-    "The common sampler is likely used in the language model generation module.",
-    "It may also be used in other modules that require language model generation."
-  ],
-  "tags": [
-    "language model",
-    "generation",
-    "sampler",
-    "parameters",
-    "samplers"
-  ],
-  "markdown": "## Common Sampler
-The common sampler is a struct that holds various parameters and samplers for language model generation.
-### Methods
-* `reset()`: Resets the sampler.
-* `set_logits()`: Sets the logits for the sampler.
-* `tm()`: Returns a time measurement object.
-### Parameters
-* `params`: The common parameters sampling object.
-* `grmr`: The grammar sampler.
-* `chain`: The chain sampler.
-* `prev`: The ring buffer of previous tokens.
-* `cur`: The vector of current tokens.
-* `cur_p`: The current token data array.
-### Performance
-The performance of the common sampler is not explicitly optimized. However, the use of a ring buffer and a vector for storing tokens suggests that the sampler is designed for efficient memory usage and fast access to tokens."
-}
+## reset
+
+Auto-generated analysis for reset.
+
+- Contains loops — consider iteration cost and early exits.
+- Calls itself — check recursion depth and tail-call possibility.
+
+**Note:** Groq API error: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01km7pyyvqezc9axbp4yv9qe63` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499783, Requested 1875. Please try again in 4m46.5024s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+

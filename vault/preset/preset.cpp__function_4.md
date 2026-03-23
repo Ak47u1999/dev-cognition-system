@@ -22,12 +22,18 @@
   ],
   "markdown": "### load_from_args
 Loads a preset from command-line arguments.
-#### Description
-This function takes in command-line arguments and attempts to parse them into a preset object.
+
+This function takes in command-line arguments and attempts to parse them into a preset object. It uses the `common_params_to_map` function to perform the parsing and checks for errors. If parsing fails, it throws a `std::runtime_error`.
+
 #### Parameters
+
 * `argc`: The number of command-line arguments.
 * `argv`: An array of command-line arguments.
+
 #### Returns
-A `common_preset` object representing the loaded preset.
+
+* A `common_preset` object representing the loaded preset.
+
 #### Throws
-* `std::runtime_error`: If parsing fails."
+
+* `std::runtime_error`: If parsing of command-line arguments fails."

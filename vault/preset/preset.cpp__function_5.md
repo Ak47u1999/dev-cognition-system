@@ -6,12 +6,12 @@ Tags: #loop #recursion
 {
   "title": "Cascade Presets",
   "summary": "The cascade function merges or adds presets to a base set, handling potential conflicts by overwriting existing presets.",
-  "details": "The cascade function is used to combine presets from different sources, allowing for the creation of a comprehensive set of presets. It supports two overloads: one for merging presets from a base set and another for adding presets from a set of presets.",
+  "details": "The cascade function is used to combine presets from different sources, allowing for the creation of a comprehensive set of presets. It supports two overloads: one for merging presets with a base set, and another for adding presets to a new set.",
   "rationale": "The function is implemented this way to allow for both merging and adding presets, providing flexibility in how presets are combined.",
-  "performance": "The function has a time complexity of O(n), where n is the number of presets being merged or added, as it iterates over each preset once.",
+  "performance": "The function has a time complexity of O(n), where n is the number of presets being added or merged. This is because it iterates over each preset once.",
   "hidden_insights": [
-    "The use of std::move to transfer ownership of the tmp object improves performance by avoiding unnecessary copies.",
-    "The function assumes that the presets being merged or added have unique names, as it does not handle conflicts between presets with the same name."
+    "The use of std::move to transfer ownership of the tmp object can improve performance by avoiding unnecessary copies.",
+    "The function assumes that the presets being added or merged have unique names, which may not always be the case in practice."
   ],
   "where_used": [
     "common_preset_context class",
@@ -27,14 +27,14 @@ Tags: #loop #recursion
 The `cascade` function is used to combine presets from different sources, allowing for the creation of a comprehensive set of presets.
 
 ### Purpose
-The function supports two overloads: one for merging presets from a base set and another for adding presets from a set of presets.
+The function supports two overloads: one for merging presets with a base set, and another for adding presets to a new set.
 
 ### Implementation
-The function iterates over each preset in the input set, merging or adding it to the base set as necessary.
+The function iterates over each preset being added or merged, and either merges it with an existing preset or adds it to the set if it does not exist.
 
 ### Performance
-The function has a time complexity of O(n), where n is the number of presets being merged or added.
+The function has a time complexity of O(n), where n is the number of presets being added or merged.
 
-### Notes
-The function assumes that the presets being merged or added have unique names, as it does not handle conflicts between presets with the same name."
+### Usage
+The `cascade` function is used in the `common_preset_context` class to manage presets. It is likely to be used in other parts of the preset management system as well."
 }

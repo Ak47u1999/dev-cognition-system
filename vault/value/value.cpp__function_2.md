@@ -32,5 +32,10 @@ The get_kwarg function iterates over the function arguments and checks if each a
 #### get_kwarg_or_pos Function
 The get_kwarg_or_pos function first calls get_kwarg to retrieve the keyword argument value. If the value is undefined and the position is within the bounds of the argument collection, it checks if the argument at that position is not a keyword argument. If both conditions are true, it returns the argument at that position.
 
-#### Usage
-These functions are likely used in the func_args class to provide a convenient way to access keyword arguments in a function. They can be used to retrieve the value of a specific keyword argument or to provide an alternative way to retrieve a value if the keyword argument is not found."
+#### Performance Considerations
+The performance of these functions is likely to be good since they only iterate over the function arguments once. However, if the function arguments are very large, the performance may degrade.
+
+#### Hidden Insights
+* The use of a default value in get_kwarg allows for a more flexible way to handle missing keyword arguments.
+* The get_kwarg_or_pos function provides an alternative way to retrieve a value if the keyword argument is not found, which can be useful in certain situations."
+}

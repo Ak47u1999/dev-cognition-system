@@ -2,42 +2,11 @@
 
 Tags: #ggml #large #loop
 
-{
-  "title": "common_json_parse",
-  "summary": "Parses a JSON string using a SAX interface, handling errors and partial parsing.",
-  "details": "This function uses a SAX interface to parse a JSON string, allowing it to handle errors and partial parsing. It uses a custom error locator to track the position of errors and a healing mechanism to recover from partial parsing.",
-  "rationale": "The function is implemented this way to provide robust error handling and partial parsing capabilities, which are essential for handling malformed or incomplete JSON data.",
-  "performance": "The function has a time complexity of O(n), where n is the length of the input JSON string. The healing mechanism can introduce additional overhead, but it is necessary for handling partial parsing.",
-  "hidden_insights": [
-    "The function uses a custom error locator to track the position of errors, which allows it to recover from partial parsing.",
-    "The healing mechanism uses a magic seed to recover from partial parsing, which can be customized by the user.",
-    "The function has a time complexity of O(n), making it efficient for handling large JSON data."
-  ],
-  "where_used": [
-    "JSON parsing and validation",
-    "Error handling and recovery",
-    "Partial parsing and healing"
-  ],
-  "tags": [
-    "JSON",
-    "SAX",
-    "Error handling",
-    "Partial parsing",
-    "Healing mechanism"
-  ],
-  "markdown": "### common_json_parse
-Parses a JSON string using a SAX interface, handling errors and partial parsing.
+## common_json_parse
 
-#### Parameters
-* `it`: iterator pointing to the start of the JSON string
-* `end`: iterator pointing to the end of the JSON string
-* `healing_marker`: custom healing marker for partial parsing
-* `out`: output common_json object
+Auto-generated analysis for common_json_parse.
 
-#### Returns
-* `true` if parsing is successful, `false` otherwise
+- Contains loops — consider iteration cost and early exits.
 
-#### Notes
-* The function uses a custom error locator to track the position of errors and a healing mechanism to recover from partial parsing.
-* The healing mechanism uses a magic seed to recover from partial parsing, which can be customized by the user.
-* The function has a time complexity of O(n), making it efficient for handling large JSON data."
+**Note:** Groq API error: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01km7pyyvqezc9axbp4yv9qe63` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499781, Requested 3506. Please try again in 9m27.9936s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+

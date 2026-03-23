@@ -13,13 +13,13 @@
   ],
   "where_used": [
     "Other functions that work with 16-bit integer vectors",
-    "Modules that require summing pairs of 16-bit integers"
+    "Functions that require summing pairs of integers"
   ],
   "tags": [
     "SIMD",
     "AVX-512",
-    "Vectorization",
-    "Performance Optimization"
+    "Integer Arithmetic",
+    "Vectorization"
   ],
   "markdown": "### Summing i16 Pairs to Float
 This function takes a 256-bit integer vector and sums pairs of 16-bit integers, returning the result as a 256-bit float vector.
@@ -27,10 +27,9 @@ This function takes a 256-bit integer vector and sums pairs of 16-bit integers, 
 #### Implementation
 The function uses the `__lasx_xvpackod_h` intrinsic to pack the input vector into pairs of 16-bit integers, and then uses `__lasx_xvaddwev_w_h` to sum these pairs. The result is then converted to a float vector using `__lasx_xvffint_s_w`.
 
-#### Performance Considerations
+#### Performance
 This function is likely optimized for performance, as it uses SIMD instructions and is marked as `inline`, which suggests that the compiler should inline the function to reduce overhead.
 
-#### Hidden Insights
-* The use of `__lasx_xvpackod_h` and `__lasx_xvaddwev_w_h` suggests that the function is designed to work with AVX-512 instructions, which are a type of SIMD instruction set.
-* The `static inline` keyword suggests that the function is intended to be used as a building block for other functions, and that the compiler should inline it to reduce overhead."
+#### Use Cases
+This function is likely used in other functions that work with 16-bit integer vectors, or in functions that require summing pairs of integers."
 }

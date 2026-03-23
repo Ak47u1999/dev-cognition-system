@@ -31,5 +31,5 @@ Allocates a new vbuffer structure and its associated chunks.
 #### Returns
 A new vbuffer structure or NULL on failure.
 #### Notes
-The function uses calloc to allocate memory for the vbuffer structure and its associated chunks. It then iterates over each chunk and allocates memory for it using ggml_backend_buft_alloc_buffer. If any chunk allocation fails, the function frees the allocated memory and returns NULL."
+The function uses calloc to allocate memory for the vbuffer structure and its associated chunks. It checks for NULL returns from ggml_backend_buft_alloc_buffer and ggml_vbuffer_free to prevent memory leaks."
 }

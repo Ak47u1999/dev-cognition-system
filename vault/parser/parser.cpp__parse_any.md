@@ -1,23 +1,22 @@
 # parser.cpp__parse_any
 
-```json
 {
   "title": "parse_any Function",
-  "summary": "Parses any statement from the input stream.",
-  "details": "The parse_any function is a recursive descent parser that attempts to parse any statement from the input stream. It uses a switch statement to determine the type of the current token and calls the corresponding parsing function. If the token type is not recognized, it throws a runtime error.",
-  "rationale": "The function is implemented using a switch statement to take advantage of the compiler's ability to optimize the code for the most common cases. This approach also makes the code easier to read and understand.",
-  "performance": "The function has a time complexity of O(1) since it uses a switch statement to determine the type of the current token. However, the overall performance of the parser depends on the complexity of the input stream and the parsing functions called by this function.",
+  "summary": "The parse_any function is a recursive descent parser that attempts to parse any valid statement from the input tokens.",
+  "details": "This function uses a switch statement to determine the type of the current token and calls the corresponding parsing function. If the token type is not recognized, it throws a runtime error.",
+  "rationale": "The function is implemented this way to allow for a simple and efficient way to handle different types of statements. The use of a switch statement makes it easy to add support for new statement types in the future.",
+  "performance": "The function has a time complexity of O(1) since it only performs a constant number of operations based on the token type.",
   "hidden_insights": [
-    "The function uses the peek() function to examine the current token without consuming it.",
-    "The function uses the mk_stmt() function to create a statement object based on the parsed token."
+    "The function uses the peek() function to check the type of the current token without consuming it.",
+    "The mk_stmt function is used to create a new statement object based on the token type."
   ],
   "where_used": [
-    "parser.cpp"
+    "likely called from the parser's main loop to parse statements",
+    "may be used in other functions to parse specific types of statements"
   ],
   "tags": [
     "parser",
     "recursive descent",
-    "switch statement"
+    "statement parsing"
   ],
-  "markdown": "### parse_any Function\n\nParses any statement from the input stream.\n\n#### Summary\n\nThe parse_any function is a recursive descent parser that attempts to parse any statement from the input stream.\n\n#### Details\n\nThe function uses a switch statement to determine the type of the current token and calls the corresponding parsing function. If the token type is not recognized, it throws a runtime error.\n\n#### Rationale\n\nThe function is implemented using a switch statement to take advantage of the compiler's ability to optimize the code for the most common cases. This approach also makes the code easier to read and understand.\n\n#### Performance\n\nThe function has a time complexity of O(1) since it uses a switch statement to determine the type of the current token. However, the overall performance of the parser depends on the complexity of the input stream and the parsing functions called by this function.\n\n#### Hidden Insights\n\n* The function uses the peek() function to examine the current token without consuming it.\n* The function uses the mk_stmt() function to create a statement object based on the parsed token.\n\n#### Where Used\n\n* parser.cpp"
-}
+  "markdown": "# parse_any Function\n\nThe `parse_any` function is a recursive descent parser that attempts to parse any valid statement from the input tokens.\n\n## Details\n\nThis function uses a switch statement to determine the type of the current token and calls the corresponding parsing function. If the token type is not recognized, it throws a runtime error.\n\n## Performance\n\nThe function has a time complexity of O(1) since it only performs a constant number of operations based on the token type.\n\n## Where Used\n\n* likely called from the parser's main loop to parse statements\n* may be used in other functions to parse specific types of statements"

@@ -26,13 +26,11 @@ Tags: #ggml #loop
   "markdown": "### ggml_backend_dev_by_name
 Finds a ggml backend development environment by name.
 #### Summary
-This function iterates over all available ggml backend development environments and returns the one with the matching name.
+This function iterates over all available ggml backend development environments and returns the one with the matching name. If no match is found, it returns a null pointer.
 #### Details
-The function uses a linear search to find the matching environment, which may not be efficient for large numbers of environments.
+The function uses a linear search to find the matching environment, which may not be efficient for large numbers of environments. However, the number of environments is likely to be small, making this approach acceptable.
 #### Performance
 The function has a time complexity of O(n), where n is the number of available environments.
-#### Rationale
-The function uses a linear search because the number of environments is likely to be small.
 #### Where Used
 * `ggml_backend_dev_count`
 * `ggml_backend_dev_get`"

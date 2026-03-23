@@ -1,48 +1,12 @@
 # quants.c__ggml_vec_dot_q2_K_q8_K
 
-Tags: #ggml #loop
+Tags: #ggml #large #loop
 
-```json
-{
-  "title": "ggml_vec_dot_q2_K_q8_K",
-  "summary": "Computes the dot product of two vectors using SIMD instructions.",
-  "details": "This function calculates the dot product of two vectors, x and y, where x is of type block_q2_K and y is of type block_q8_K. It uses SIMD instructions to optimize performance.",
-  "rationale": "The function is implemented using SIMD instructions to take advantage of the parallel processing capabilities of modern CPUs. This allows for significant performance improvements over a non-SIMD implementation.",
-  "performance": "The function uses SIMD instructions to perform operations on multiple elements simultaneously, resulting in a significant performance improvement over a non-SIMD implementation.",
-  "hidden_insights": [
-    "The function uses a combination of vector and scalar operations to optimize performance.",
-    "The use of SIMD instructions allows the function to take advantage of the parallel processing capabilities of modern CPUs.",
-    "The function uses a combination of vector and scalar operations to optimize performance."
-  ],
-  "where_used": [
-    "ggml_vec_dot_q2_K_q8_K_generic",
-    "other functions that require the dot product of two vectors"
-  ],
-  "tags": [
-    "SIMD",
-    "dot product",
-    "vector operations",
-    "performance optimization"
-  ],
-  "markdown": "## ggml_vec_dot_q2_K_q8_K
-Computes the dot product of two vectors using SIMD instructions.
+## ggml_vec_dot_q2_K_q8_K
 
-### Summary
-This function calculates the dot product of two vectors, x and y, where x is of type block_q2_K and y is of type block_q8_K.
+Auto-generated analysis for ggml_vec_dot_q2_K_q8_K.
 
-### Details
-The function uses SIMD instructions to optimize performance. It takes advantage of the parallel processing capabilities of modern CPUs to perform operations on multiple elements simultaneously.
+- Contains loops — consider iteration cost and early exits.
 
-### Performance
-The function uses SIMD instructions to perform operations on multiple elements simultaneously, resulting in a significant performance improvement over a non-SIMD implementation.
+**Note:** Groq API error: {"error":{"message":"Request too large for model `llama-3.1-8b-instant` in organization `org_01km7pyyvqezc9axbp4yv9qe63` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Requested 6962, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
 
-### Where Used
-This function is used in the `ggml_vec_dot_q2_K_q8_K_generic` function and other functions that require the dot product of two vectors.
-
-### Tags
-* SIMD
-* dot product
-* vector operations
-* performance optimization"
-}
-```

@@ -23,15 +23,16 @@ Tags: #memory
     "Configuration",
     "File format"
   ],
-  "markdown": "# Preset Parser
-This function defines a parser for INI files using the PEG (Parsing Expression Grammar) library.
+  "markdown": "## Preset Parser
+This function defines a parser for INI files using the PEG library.
 
-## Overview
-The parser is defined using a lambda function that takes a parser object `p` as an argument. It breaks down the file into various components such as lines, header lines, key-value pairs, comments, and blank lines.
+### Purpose
+The parser is designed to break down the INI file into various components such as lines, header lines, key-value pairs, comments, and blank lines.
 
-## Rules
-The parser defines several rules for parsing different parts of the INI file, including:
+### Grammar
+The parser is defined using a lambda function that takes a parser object `p` as an argument. It defines several rules for parsing different parts of the INI file, including newline characters, whitespace, comments, and key-value pairs.
 
+### Rules
 * `newline`: matches a newline character (`\r\n`, `\n`, or `\r`)
 * `ws`: matches whitespace characters (` ` or `\t`)
 * `comment`: matches a comment line (`[;#] (!newline .)*`)
@@ -43,7 +44,6 @@ The parser defines several rules for parsing different parts of the INI file, in
 * `comment-line`: matches a comment line (`ws comment (newline / EOF)`)
 * `blank-line`: matches a blank line (`ws (newline / EOF)`)
 * `line`: matches a line (`header-line / kv-line / comment-line / blank-line`)
-* `ini`: matches the entire INI file (`line* EOF`)
+* `ini`: matches the entire INI file (`line* EOF`)"
 
-## Usage
-The parser can be used to parse INI files and extract the parsed data for further processing."
+}

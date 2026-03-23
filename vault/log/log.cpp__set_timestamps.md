@@ -4,31 +4,32 @@
 {
   "title": "Set Timestamps Flag",
   "summary": "Sets a flag indicating whether timestamps should be included in log messages.",
-  "details": "This function is used to toggle the inclusion of timestamps in log messages. It takes a boolean value as input, which determines whether timestamps are enabled or disabled.",
-  "rationale": "The use of a mutex ensures thread safety when accessing the timestamps flag, preventing concurrent modifications.",
-  "performance": "The use of a lock_guard, which automatically releases the lock when it goes out of scope, minimizes the performance impact of thread safety.",
+  "details": "This function is used to toggle the inclusion of timestamps in log messages. It takes a boolean parameter, which is used to update the internal state of the object.",
+  "rationale": "The use of a lock guard ensures thread safety when updating the internal state of the object.",
+  "performance": "The use of a lock guard may introduce performance overhead due to the overhead of locking and unlocking the mutex.",
   "hidden_insights": [
-    "The function modifies a member variable of the class, implying that this class is responsible for managing log messages.",
-    "The use of a mutex suggests that this class may be used in a multi-threaded environment."
+    "The use of a lock guard implies that this function is intended to be called from multiple threads.",
+    "The mutex is likely a member variable of the class, and is used to protect access to the internal state of the object."
   ],
   "where_used": [
     "log.cpp"
   ],
   "tags": [
-    "thread safety",
+    "thread-safety",
     "mutex",
-    "log management"
+    "log-messages"
   ],
   "markdown": "### Set Timestamps Flag
 Sets a flag indicating whether timestamps should be included in log messages.
-#### Purpose
-Toggle the inclusion of timestamps in log messages.
-#### Parameters
-* `timestamps`: A boolean value indicating whether timestamps are enabled or disabled.
-#### Thread Safety
-The function uses a mutex to ensure thread safety when accessing the timestamps flag.
+#### Details
+This function is used to toggle the inclusion of timestamps in log messages. It takes a boolean parameter, which is used to update the internal state of the object.
+#### Rationale
+The use of a lock guard ensures thread safety when updating the internal state of the object.
 #### Performance Considerations
-The use of a lock_guard minimizes the performance impact of thread safety.
-#### Usage
-This function is likely used in conjunction with other log management functions to control the inclusion of timestamps in log messages."
+The use of a lock guard may introduce performance overhead due to the overhead of locking and unlocking the mutex.
+#### Hidden Insights
+* The use of a lock guard implies that this function is intended to be called from multiple threads.
+* The mutex is likely a member variable of the class, and is used to protect access to the internal state of the object.
+#### Where Used
+* log.cpp"
 }

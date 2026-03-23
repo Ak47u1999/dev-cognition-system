@@ -1,46 +1,47 @@
 # quants.c__ggml_vec_dot_iq2_s_q8_K
 
-Tags: #ggml #loop #memory
+Tags: #ggml #loop
 
 ```json
 {
   "title": "ggml_vec_dot_iq2_s_q8_K",
-  "summary": "Computes the dot product of two vectors, one of IQ2S and the other of Q8, with a specified number of repetitions.",
-  "details": "This function is designed to optimize the dot product computation on LoongArch architecture. It uses SIMD instructions to process multiple elements in parallel, resulting in improved performance. The function takes into account the specific characteristics of the IQ2S and Q8 data types, including their scaling and sign information.",
-  "rationale": "The function is implemented in this way to take advantage of the LoongArch architecture's SIMD capabilities. By using specialized instructions and data types, the function can achieve better performance than a generic implementation.",
-  "performance": "The function uses SIMD instructions to process multiple elements in parallel, resulting in improved performance. However, the performance may vary depending on the specific hardware and data characteristics.",
+  "summary": "Computes the dot product of two vectors, one of IQ2_S type and the other of Q8_K type, using NEON instructions.",
+  "details": "This function takes in two vectors, x and y, and computes their dot product. The function uses NEON instructions to optimize the computation. It first checks if the input vectors are aligned and then proceeds to compute the dot product. The function uses a loop to iterate over the elements of the vectors and computes the dot product for each element. The result is then accumulated and returned.",
+  "rationale": "The function is implemented using NEON instructions to take advantage of the SIMD capabilities of the ARM architecture. This allows for significant performance improvements compared to a non-NEON implementation.",
+  "performance": "The function has a time complexity of O(n), where n is the length of the input vectors. The function uses NEON instructions to optimize the computation, which can result in significant performance improvements on ARM architectures.",
   "hidden_insights": [
-    "The function uses a combination of __m128i and __m256i data types to optimize the computation.",
-    "The function uses specialized instructions, such as __lsx_vreplgr2vr_b and __lasx_xvld, to load and manipulate data.",
-    "The function uses a lookup table, iq2s_grid, to map IQ2S values to their corresponding Q8 values."
+    "The function uses a loop to iterate over the elements of the vectors, which allows it to take advantage of the SIMD capabilities of the ARM architecture.",
+    "The function uses NEON instructions to optimize the computation, which can result in significant performance improvements on ARM architectures.",
+    "The function uses a mask to select the relevant elements of the input vectors, which allows it to avoid unnecessary computations."
   ],
   "where_used": [
     "ggml_vec_dot_iq2_s_q8_K_generic",
-    "other functions that require the dot product of IQ2S and Q8 vectors"
+    "other functions that require the dot product of IQ2_S and Q8_K vectors"
   ],
   "tags": [
-    "LoongArch",
+    "NEON",
     "SIMD",
+    "ARM",
     "dot product",
-    "IQ2S",
-    "Q8"
+    "vector operations"
   ],
   "markdown": "### ggml_vec_dot_iq2_s_q8_K
-Computes the dot product of two vectors, one of IQ2S and the other of Q8, with a specified number of repetitions.
+Computes the dot product of two vectors, one of IQ2_S type and the other of Q8_K type, using NEON instructions.
 
 #### Parameters
-* `n`: The number of repetitions.
-* `s`: The output vector.
-* `bs`: The block size.
-* `vx`: The input vector of IQ2S values.
-* `bx`: The block size of the input vector.
-* `vy`: The input vector of Q8 values.
-* `by`: The block size of the input vector.
-* `nrc`: The number of repetitions (currently unused).
+* `n`: the length of the input vectors
+* `s`: the result of the dot product
+* `bs`: the block size
+* `vx`: the first input vector
+* `bx`: the block size of the first input vector
+* `vy`: the second input vector
+* `by`: the block size of the second input vector
+* `nrc`: the number of blocks
 
 #### Returns
-The dot product of the two input vectors.
+* the result of the dot product
 
 #### Notes
-This function is designed to optimize the dot product computation on LoongArch architecture. It uses SIMD instructions to process multiple elements in parallel, resulting in improved performance. The function takes into account the specific characteristics of the IQ2S and Q8 data types, including their scaling and sign information."
+The function uses NEON instructions to optimize the computation. It first checks if the input vectors are aligned and then proceeds to compute the dot product. The function uses a loop to iterate over the elements of the vectors and computes the dot product for each element. The result is then accumulated and returned."
 }
+```

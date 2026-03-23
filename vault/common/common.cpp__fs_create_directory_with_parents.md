@@ -32,11 +32,11 @@ This function creates a directory with its parents if they do not exist.
 bool fs_create_directory_with_parents(const std::string & path)
 ```
 ### Parameters
-* `path`: the path to the directory to create
+* `path`: The path to the directory to create.
 
 ### Returns
-* `true` if the directory and its parents are created successfully
-* `false` if any of the sub-paths cannot be created
+* `true` if the directory and its parents are created successfully.
+* `false` if any of the sub-paths cannot be created.
 
 ### Notes
 This function uses the Windows API on Windows and the POSIX API on Unix-like systems. It is designed to handle the differences between these two systems."

@@ -18,10 +18,10 @@ Tags: #accel #ggml #gpu
     "other modules that require backend loading"
   ],
   "tags": [
-    "backend",
-    "loading",
-    "directory",
-    "environment variable"
+    "backend loading",
+    "directory path",
+    "environment variable",
+    "silent mode"
   ],
   "markdown": "## ggml_backend_load_all_from_path
 Loads all available backends from a specified directory path.
@@ -40,5 +40,6 @@ The function iterates over a list of backend names and calls the `ggml_backend_l
 The function has a time complexity of O(n), where n is the number of backends being loaded.
 
 ### Notes
-The function uses the `NDEBUG` macro to determine whether to run in silent mode or not. The function checks for an environment variable `GGML_BACKEND_PATH` to load an out-of-tree backend."
+* The function uses the `NDEBUG` macro to determine whether to run in silent mode or not.
+* The function checks for an environment variable `GGML_BACKEND_PATH` to load an out-of-tree backend."
 }

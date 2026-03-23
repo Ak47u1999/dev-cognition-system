@@ -8,8 +8,8 @@
   "rationale": "The function is implemented using SIMD instructions to take advantage of the parallel processing capabilities of modern CPUs. This allows for significant performance improvements when dealing with large datasets.",
   "performance": "The use of SIMD instructions can lead to a significant performance boost, especially for large datasets. However, the actual performance gain will depend on the specific hardware and the size of the input data.",
   "hidden_insights": [
-    "The function uses the `lasx_maddubs_h` intrinsic to perform the multiplication and creation of 16-bit values in a single operation.",
-    "The result is then passed to the `sum_i16_pairs_float` function to compute the final dot product."
+    "The function uses the `lasx_maddubs_h` intrinsic to perform the multiplication and accumulation of the dot product.",
+    "The result is then passed to the `sum_i16_pairs_float` function to convert the 16-bit integer values to floating-point numbers."
   ],
   "where_used": [
     "Signal processing applications",

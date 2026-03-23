@@ -2,24 +2,23 @@
 
 ```json
 {
-  "title": "Common N-Gram Modification",
-  "summary": "Adds an entry to the common n-gram modification data structure.",
-  "details": "This function adds a new entry to the common n-gram modification data structure. It first calculates the index of the entry using the `idx` function, then checks if the entry at that index is empty. If it is, it increments the `used` counter. Finally, it assigns the nth token from the input array to the entry at the calculated index.",
-  "rationale": "The implementation may be designed to optimize for memory usage by reusing empty entries and only incrementing the `used` counter when a new entry is added.",
-  "performance": "The function has a time complexity of O(1) since it only involves a single array access and a conditional statement. However, the `idx` function may have a higher time complexity depending on its implementation.",
+  "title": "common_ngram_mod::add",
+  "summary": "Adds an n-gram to the common_ngram_mod data structure.",
+  "details": "This function adds a new n-gram to the common_ngram_mod data structure. It first calculates the index of the n-gram using the idx function, then checks if the entry at that index is empty. If it is, the used counter is incremented. Finally, the entry at the calculated index is updated with the new n-gram.",
+  "rationale": "The implementation may be designed to handle empty entries and increment the used counter to keep track of the number of used entries.",
+  "performance": "The function has a time complexity of O(1) since it uses a hash function (idx) to calculate the index and array access to update the entry.",
   "hidden_insights": [
-    "The `used` counter is likely used to track the number of non-empty entries in the data structure.",
-    "The `EMPTY` constant is used to represent an empty entry, which suggests that the data structure is designed to handle sparse or empty entries."
+    "The function assumes that the idx function is implemented correctly and returns the correct index for the given n-gram.",
+    "The used counter may be used to optimize memory usage or to provide information about the usage of the data structure."
   ],
   "where_used": [
-    "Common n-gram modification algorithms",
-    "Language modeling or text processing pipelines"
+    "likely in a natural language processing or machine learning module"
   ],
   "tags": [
     "n-gram",
-    "language modeling",
-    "text processing",
-    "data structure"
+    "common_ngram_mod",
+    "data structure",
+    "array access"
   ],
-  "markdown": "### Common N-Gram Modification\n\nAdds an entry to the common n-gram modification data structure.\n\n#### Details\n\nThis function calculates the index of the entry using the `idx` function, then checks if the entry at that index is empty. If it is, it increments the `used` counter. Finally, it assigns the nth token from the input array to the entry at the calculated index.\n\n#### Rationale\n\nThe implementation may be designed to optimize for memory usage by reusing empty entries and only incrementing the `used` counter when a new entry is added.\n\n#### Performance\n\nThe function has a time complexity of O(1) since it only involves a single array access and a conditional statement.\n\n#### Hidden Insights\n\n* The `used` counter is likely used to track the number of non-empty entries in the data structure.\n* The `EMPTY` constant is used to represent an empty entry, which suggests that the data structure is designed to handle sparse or empty entries."
+  "markdown": "## common_ngram_mod::add\n\nAdds an n-gram to the common_ngram_mod data structure.\n\n### Details\n\nThis function calculates the index of the n-gram using the idx function, checks if the entry at that index is empty, and updates the entry with the new n-gram if it is not empty.\n\n### Performance\n\nThe function has a time complexity of O(1) due to the use of a hash function and array access.\n\n### Where Used\n\nThis function is likely used in a natural language processing or machine learning module.\n\n### Tags\n\n* n-gram\n* common_ngram_mod\n* data structure\n* array access"
 }

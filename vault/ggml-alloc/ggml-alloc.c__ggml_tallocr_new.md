@@ -5,8 +5,8 @@ Tags: #ggml #memory
 ```json
 {
   "title": "ggml_tallocr_new Function",
-  "summary": "Creates a new ggml_tallocr structure from a given buffer.",
-  "details": "This function initializes a ggml_tallocr structure with the provided buffer, base address, alignment, and offset. It ensures the alignment is a power of 2.",
+  "summary": "Creates a new ggml_tallocr structure from a given ggml_backend_buffer_t.",
+  "details": "This function initializes a ggml_tallocr structure with the provided buffer, base address, alignment, and offset. The alignment is checked to ensure it's a power of 2.",
   "rationale": "The function may be implemented this way to ensure proper memory allocation and alignment for the ggml_tallocr structure.",
   "performance": "The function has a time complexity of O(1) as it only performs a few constant-time operations.",
   "hidden_insights": [
@@ -20,19 +20,22 @@ Tags: #ggml #memory
   ],
   "tags": [
     "memory allocation",
-    "buffer",
-    "alignment",
-    "ggml"
+    "ggml",
+    "tallocr",
+    "buffer"
   ],
   "markdown": "### ggml_tallocr_new Function
-Creates a new ggml_tallocr structure from a given buffer.
+Creates a new ggml_tallocr structure from a given ggml_backend_buffer_t.
+
 #### Purpose
 This function initializes a ggml_tallocr structure with the provided buffer, base address, alignment, and offset.
+
 #### Details
-* Ensures the alignment is a power of 2 using an assert statement.
-* Uses the `aligned_offset` function to calculate the initial offset.
+The function checks if the alignment is a power of 2 using an assert statement. It then uses the aligned_offset function to calculate the initial offset.
+
+#### Performance
+The function has a time complexity of O(1) as it only performs a few constant-time operations.
+
 #### Where Used
-* `ggml_backend_buffer_get_base`
-* `ggml_backend_buffer_get_alignment`
-* `aligned_offset`"
+This function is likely used in conjunction with other functions such as ggml_backend_buffer_get_base and ggml_backend_buffer_get_alignment."
 }

@@ -20,20 +20,24 @@
     "time",
     "format",
     "std::chrono",
-    "std::localtime"
+    "std::localtime",
+    "std::ostringstream"
   ],
   "markdown": "### Format Time Function
 This function formats a time point according to a specified format string.
 
-#### Purpose
-The purpose of this function is to provide a flexible way to format time points in a variety of formats.
+#### Parameters
+* `now`: The time point to format
+* `format`: The format string to use
 
-#### Implementation
-The function uses the `std::chrono` library to convert the time point to a time_t object, and then uses `std::localtime` to convert it to a struct tm. Finally, it uses an `std::ostringstream` to format the time according to the specified format string.
+#### Returns
+A string representation of the time in the specified format
 
-#### Performance
-The function has a time complexity of O(1), as it only involves a few constant-time operations. However, it may have a small overhead due to the use of `std::localtime` and `std::ostringstream`.
-
-#### Usage
-This function is likely used in logging modules, display functions, and time-related utilities."
-}
+#### Example
+```cpp
+auto now = std::chrono::system_clock::now();
+auto formatted_time = format_time(now, "%Y-%m-%d %H:%M:%S");
+std::cout << formatted_time << std::endl;
+```
+#### Notes
+This function uses the `std::chrono` library to convert the time point to a time_t object, and then uses `std::localtime` to convert it to a struct tm. Finally, it uses an `std::ostringstream` to format the time according to the specified format string."

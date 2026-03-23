@@ -11,7 +11,7 @@
     "The CPUID instruction can be used to retrieve information about the CPU, including its features, capabilities, and model number."
   ],
   "where_used": [
-    "This function is likely used in systems that require hybrid CPU support, such as virtualization software or operating systems."
+    "This function is likely used in systems that require hybrid CPU support, such as virtualization software or high-performance computing applications."
   ],
   "tags": [
     "CPUID",
@@ -22,8 +22,8 @@
   "markdown": "### is_hybrid_cpu
 Checks if the CPU is a hybrid CPU by examining the CPUID feature flags.
 #### Purpose
-This function is used to determine whether the CPU is a hybrid CPU.
+This function is used to determine whether the CPU is a hybrid CPU, which is a CPU that combines two or more different CPU architectures in a single package.
 #### Implementation
 The function uses the CPUID instruction to retrieve information about the CPU and checks the 15th bit of the EDX register to determine whether the CPU is a hybrid CPU.
 #### Usage
-This function is likely used in systems that require hybrid CPU support, such as virtualization software or operating systems."
+This function is likely used in systems that require hybrid CPU support, such as virtualization software or high-performance computing applications."

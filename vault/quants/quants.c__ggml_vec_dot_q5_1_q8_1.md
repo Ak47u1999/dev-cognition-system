@@ -1,41 +1,44 @@
 # quants.c__ggml_vec_dot_q5_1_q8_1
 
-Tags: #ggml #loop
+Tags: #ggml #loop #memory
 
 ```json
 {
   "title": "ggml_vec_dot_q5_1_q8_1",
-  "summary": "Computes the dot product of two vectors using SIMD instructions, optimized for POWER9 architecture.",
-  "details": "This function takes two vectors `vx` and `vy` of size `n` and computes their dot product. It uses SIMD instructions to perform the computation in parallel, taking advantage of the POWER9 architecture's vector capabilities. The function is divided into two parts: one for the POWER9 architecture and another for generic architectures.",
-  "rationale": "The function is implemented this way to take advantage of the POWER9 architecture's vector capabilities, which can significantly improve performance for certain types of computations.",
-  "performance": "The function uses SIMD instructions to perform the computation in parallel, which can significantly improve performance for large vectors. However, the performance may degrade for small vectors due to the overhead of the SIMD instructions.",
+  "summary": "Computes the dot product of two vectors using SIMD instructions and lookup tables.",
+  "details": "This function calculates the dot product of two vectors, `vx` and `vy`, with a block size of `qk`. It uses SIMD instructions to perform the computation in parallel. The function also uses lookup tables to extract the high bits of the input data.",
+  "rationale": "The use of SIMD instructions and lookup tables allows for efficient computation of the dot product, especially for large input sizes. The function is also designed to handle edge cases, such as when the input size is not a multiple of the block size.",
+  "performance": "The function has a time complexity of O(n/qk), where n is the input size and qk is the block size. The use of SIMD instructions and lookup tables reduces the number of operations required, making the function efficient for large input sizes.",
   "hidden_insights": [
-    "The function uses the `__builtin_prefetch` instruction to prefetch the data from memory, which can improve performance by reducing the latency of the memory accesses.",
-    "The function uses the `vec_madd` instruction to perform the multiplication and addition of two vectors in a single operation, which can improve performance by reducing the number of instructions required."
+    "The function uses a lookup table to extract the high bits of the input data, which is a common technique in numerical computations.",
+    "The use of SIMD instructions allows for parallel computation of the dot product, which can significantly improve performance for large input sizes."
   ],
   "where_used": [
-    "ggml_vec_dot_q5_1_q8_1_generic",
-    "other functions that require the dot product of two vectors"
+    "This function is likely used in a larger program that performs numerical computations, such as scientific simulations or data analysis."
   ],
   "tags": [
     "SIMD",
-    "POWER9",
-    "vectorization",
-    "dot product"
+    "lookup tables",
+    "dot product",
+    "numerical computations"
   ],
-  "markdown": "## ggml_vec_dot_q5_1_q8_1
-Computes the dot product of two vectors using SIMD instructions, optimized for POWER9 architecture.
+  "markdown": "### ggml_vec_dot_q5_1_q8_1
+Computes the dot product of two vectors using SIMD instructions and lookup tables.
 
-### Summary
-This function takes two vectors `vx` and `vy` of size `n` and computes their dot product.
+#### Parameters
+* `n`: The input size
+* `s`: The output sum
+* `vx`: The first input vector
+* `vy`: The second input vector
+* `bs`: The block size (not used)
+* `bx`: The block size (not used)
+* `by`: The block size (not used)
+* `nrc`: The number of blocks (not used)
 
-### Details
-The function uses SIMD instructions to perform the computation in parallel, taking advantage of the POWER9 architecture's vector capabilities. The function is divided into two parts: one for the POWER9 architecture and another for generic architectures.
+#### Returns
+The dot product of the two input vectors
 
-### Performance
-The function uses SIMD instructions to perform the computation in parallel, which can significantly improve performance for large vectors. However, the performance may degrade for small vectors due to the overhead of the SIMD instructions.
-
-### Hidden Insights
-* The function uses the `__builtin_prefetch` instruction to prefetch the data from memory, which can improve performance by reducing the latency of the memory accesses.
-* The function uses the `vec_madd` instruction to perform the multiplication and addition of two vectors in a single operation, which can improve performance by reducing the number of instructions required."
+#### Notes
+This function uses SIMD instructions to perform the computation in parallel. It also uses lookup tables to extract the high bits of the input data. The function is designed to handle edge cases, such as when the input size is not a multiple of the block size."
 }
+```

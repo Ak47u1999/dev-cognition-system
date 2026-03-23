@@ -17,8 +17,14 @@ Tags: #ggml
   ],
   "tags": [
     "backend registration",
-    "index",
-    "assertion",
-    "performance"
+    "indexing",
+    "assertion"
   ],
-  "markdown": "# ggml_backend_reg_get\n\nRetrieves a backend registration at a given index.\n\n## Summary\n\nThis function retrieves a backend registration from a list of available registrations.\n\n## Details\n\nThe function takes an index as input and returns the corresponding registration. The function first asserts that the index is within the valid range using `ggml_backend_reg_count()`. If the index is valid, it returns the registration at the specified index from the list of available registrations.\n\n## Rationale\n\nThe function is implemented this way to ensure that the index is valid before attempting to access the registration. This prevents potential out-of-bounds errors and makes the code more robust.\n\n## Performance\n\nThe function has a time complexity of O(1) since it directly accesses the registration at the specified index.\n\n## Hidden Insights\n\n* The function assumes that the list of registrations is non-empty and that the index is valid. If the list is empty or the index is invalid, the function will assert and terminate.\n* The use of `get_reg()` suggests that the registrations are stored in a global or static context.\n\n## Where Used\n\n* `ggml_backend_reg.cpp`"
+  "markdown": "### ggml_backend_reg_get
+Retrieves a backend registration at a given index.
+#### Parameters
+* `index`: The index of the registration to retrieve.
+#### Returns
+The registration at the specified index.
+#### Notes
+The function asserts that the index is within the valid range using `ggml_backend_reg_count()`. If the index is invalid, the function will terminate."

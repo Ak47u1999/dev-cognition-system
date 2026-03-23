@@ -2,44 +2,12 @@
 
 Tags: #complex #ggml #kernel #loop #memory
 
-```json
-{
-  "title": "ggml_gallocr_reserve_n_impl",
-  "summary": "Reserves memory for a graph in the gallocr allocator, allocating buffers as needed.",
-  "details": "This function is responsible for reserving memory for a graph in the gallocr allocator. It first checks if the hash table needs to be resized, and if so, it frees the old hash table and creates a new one with the correct size. It then resets the allocators for each buffer and allocates memory for the graph in the hash table. Finally, it sets the node and leaf allocations from the hash table and reallocates buffers if necessary.",
-  "rationale": "The function is implemented this way to ensure that the hash table is always large enough to hold all the nodes and leaves in the graph, and that the allocators are reset before each allocation to prevent memory leaks.",
-  "performance": "The function has a time complexity of O(n), where n is the number of nodes and leaves in the graph. It also has a space complexity of O(n), as it needs to store the hash table and the allocators.",
-  "hidden_insights": [
-    "The function uses a 25% margin to avoid hash collisions, which can improve performance in certain scenarios.",
-    "The function reallocates buffers if necessary, which can improve performance by reducing the number of memory allocations."
-  ],
-  "where_used": [
-    "ggml_gallocr_alloc_graph_impl",
-    "ggml_gallocr_hash_get"
-  ],
-  "tags": [
-    "gallocr",
-    "allocator",
-    "memory management",
-    "graph"
-  ],
-  "markdown": "### ggml_gallocr_reserve_n_impl
-Reserves memory for a graph in the gallocr allocator, allocating buffers as needed.
+## ggml_gallocr_reserve_n_impl
 
-#### Purpose
-This function is responsible for reserving memory for a graph in the gallocr allocator.
+Auto-generated analysis for ggml_gallocr_reserve_n_impl.
 
-#### Implementation
-The function first checks if the hash table needs to be resized, and if so, it frees the old hash table and creates a new one with the correct size. It then resets the allocators for each buffer and allocates memory for the graph in the hash table. Finally, it sets the node and leaf allocations from the hash table and reallocates buffers if necessary.
+- Performs heap allocations or raw memory operations.
+- Contains loops — consider iteration cost and early exits.
 
-#### Performance Considerations
-The function has a time complexity of O(n), where n is the number of nodes and leaves in the graph. It also has a space complexity of O(n), as it needs to store the hash table and the allocators.
+**Note:** Groq API error: {"error":{"message":"Rate limit reached for model `llama-3.1-8b-instant` in organization `org_01km7pyyvqezc9axbp4yv9qe63` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499866, Requested 1710. Please try again in 4m32.332799999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
 
-#### Hidden Insights
-* The function uses a 25% margin to avoid hash collisions, which can improve performance in certain scenarios.
-* The function reallocates buffers if necessary, which can improve performance by reducing the number of memory allocations.
-
-#### Where Used
-* `ggml_gallocr_alloc_graph_impl`
-* `ggml_gallocr_hash_get`"
-}

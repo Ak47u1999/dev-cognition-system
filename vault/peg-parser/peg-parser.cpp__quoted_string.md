@@ -11,7 +11,7 @@
     "The use of a lambda function to create the choice combinator allows for the capture of the current object's context, making it easier to access other parser rules."
   ],
   "where_used": [
-    "peg-parser-builder.cpp"
+    "peg-parser.cpp"
   ],
   "tags": [
     "PEG parser",

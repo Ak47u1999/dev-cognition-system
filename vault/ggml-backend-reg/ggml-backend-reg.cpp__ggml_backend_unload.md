@@ -2,24 +2,25 @@
 
 Tags: #ggml
 
+```json
 {
   "title": "Unload ggml Backend",
-  "summary": "Unloads a registered ggml backend.",
-  "details": "This function takes a ggml_backend_reg_t object as input and calls the unload_backend method on the global registry, passing the provided backend registration and a boolean flag indicating whether to force unload.",
-  "rationale": "The function delegates the actual unloading to the global registry's unload_backend method, suggesting a modular design where backend management is centralized.",
-  "performance": "The function's performance is likely dependent on the implementation of the unload_backend method in the global registry.",
+  "summary": "Unloads a ggml backend registration.",
+  "details": "This function unloads a ggml backend registration by calling the unload_backend method on the global registration object.",
+  "rationale": "The function is likely implemented this way to encapsulate the unload logic within a single function, making it easier to manage and maintain.",
+  "performance": "The performance impact of this function is likely minimal, as it simply calls another method.",
   "hidden_insights": [
-    "The function does not perform any error checking on the input reg object.",
-    "The unload_backend method is called with a boolean flag, which may indicate a forced unload scenario."
+    "The get_reg() function is assumed to return a valid registration object.",
+    "The unload_backend method is called with a boolean flag set to true, indicating that the backend should be unloaded."
   ],
   "where_used": [
-    "ggml_backend_reg.cpp",
-    "ggml_backend.cpp"
+    "ggml_backend_reg.cpp"
   ],
   "tags": [
     "ggml",
     "backend",
-    "unload",
-    "registry"
+    "registration",
+    "unload"
   ],
-  "markdown": "# Unload ggml Backend\n\nUnloads a registered ggml backend.\n\n## Details\n\nThis function takes a `ggml_backend_reg_t` object as input and calls the `unload_backend` method on the global registry, passing the provided backend registration and a boolean flag indicating whether to force unload.\n\n## Rationale\n\nThe function delegates the actual unloading to the global registry's `unload_backend` method, suggesting a modular design where backend management is centralized.\n\n## Performance\n\nThe function's performance is likely dependent on the implementation of the `unload_backend` method in the global registry.\n\n## Hidden Insights\n\n* The function does not perform any error checking on the input `reg` object.\n* The `unload_backend` method is called with a boolean flag, which may indicate a forced unload scenario.\n\n## Where Used\n\n* `ggml_backend_reg.cpp`\n* `ggml_backend.cpp`"
+  "markdown": "## Unload ggml Backend\n\nUnloads a ggml backend registration.\n\n### Details\n\nThis function unloads a ggml backend registration by calling the unload_backend method on the global registration object.\n\n### Rationale\n\nThe function is likely implemented this way to encapsulate the unload logic within a single function, making it easier to manage and maintain.\n\n### Performance\n\nThe performance impact of this function is likely minimal, as it simply calls another method.\n\n### Hidden Insights\n\n* The `get_reg()` function is assumed to return a valid registration object.\n* The `unload_backend` method is called with a boolean flag set to true, indicating that the backend should be unloaded.\n\n### Where Used\n\n* `ggml_backend_reg.cpp`"
+}

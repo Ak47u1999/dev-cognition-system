@@ -3,13 +3,13 @@
 ```json
 {
   "title": "Section Parser",
-  "summary": "A function that builds a parser for section tags in a chat log.",
-  "details": "This function uses a PEG (Parsing Expression Grammar) parser to extract section tags from a chat log. It defines a parser that matches the pattern 'sec_start' followed by a marker, optional space, and then the rest of the input.",
-  "rationale": "The use of a PEG parser allows for efficient and flexible parsing of the chat log. The parser is defined as a lambda function to allow for easy modification and extension.",
-  "performance": "The performance of this function is likely to be good due to the use of a PEG parser, which is designed for efficient parsing. However, the actual performance will depend on the size and complexity of the input chat log.",
+  "summary": "Builds a parser for section start markers in a chat log.",
+  "details": "This function uses a PEG (Parsing Expression Grammar) parser to identify section start markers in a chat log. It defines a parser that matches the pattern 'sec_start' followed by a marker and optional whitespace, and then captures the rest of the input as the section content.",
+  "rationale": "The use of a PEG parser allows for efficient and flexible parsing of the chat log format. The parser is defined as a lambda function to encapsulate the parsing logic and make it reusable.",
+  "performance": "The performance of this function is likely to be good due to the use of a PEG parser, which can parse the input efficiently. However, the actual performance will depend on the size of the input and the complexity of the parsing logic.",
   "hidden_insights": [
-    "The use of a lambda function to define the parser allows for easy modification and extension of the parser without having to redefine the entire function.",
-    "The parser is designed to match the pattern 'sec_start' followed by a marker, optional space, and then the rest of the input, which suggests that the chat log is expected to have a specific format."
+    "The use of a lambda function to define the parser allows for easy modification and extension of the parsing logic.",
+    "The parser is designed to be reusable, making it easier to parse different types of chat logs."
   ],
   "where_used": [
     "chat_log_parser.cpp",
@@ -17,21 +17,26 @@
   ],
   "tags": [
     "PEG parser",
-    "section tags",
-    "chat log"
+    "chat log",
+    "section start marker"
   ],
   "markdown": "### Section Parser
-A function that builds a parser for section tags in a chat log.
+Builds a parser for section start markers in a chat log.
 
 #### Summary
-This function uses a PEG (Parsing Expression Grammar) parser to extract section tags from a chat log.
+This function uses a PEG (Parsing Expression Grammar) parser to identify section start markers in a chat log.
 
 #### Details
-The parser is defined as a lambda function to allow for easy modification and extension. It matches the pattern 'sec_start' followed by a marker, optional space, and then the rest of the input.
+The parser is defined as a lambda function to encapsulate the parsing logic and make it reusable. It matches the pattern 'sec_start' followed by a marker and optional whitespace, and then captures the rest of the input as the section content.
 
 #### Performance
-The performance of this function is likely to be good due to the use of a PEG parser. However, the actual performance will depend on the size and complexity of the input chat log.
+The performance of this function is likely to be good due to the use of a PEG parser, which can parse the input efficiently.
 
 #### Where Used
-This function is likely to be used in the `chat_log_parser.cpp` and `chat_diff_analyzer.cpp` modules.
-```
+This function is likely to be used in `chat_log_parser.cpp` and `chat_diff_analyzer.cpp`.
+
+#### Tags
+* PEG parser
+* chat log
+* section start marker"
+}

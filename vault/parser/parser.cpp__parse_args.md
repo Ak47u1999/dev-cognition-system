@@ -4,34 +4,21 @@ Tags: #loop
 
 {
   "title": "parse_args Function",
-  "summary": "Parses a comma-separated list of arguments from a token stream.",
-  "details": "The `parse_args` function is responsible for parsing a list of arguments from a token stream. It uses a while loop to iterate over the tokens, consuming each argument until it encounters a closing parenthesis. The function handles both positional and keyword arguments, as well as unpacking expressions.",
-  "rationale": "The function is implemented this way to allow for flexible parsing of arguments, including keyword arguments and unpacking expressions. This allows the parser to handle a wide range of input formats.",
-  "performance": "The function has a time complexity of O(n), where n is the number of arguments in the input list. This is because it uses a while loop to iterate over the tokens.",
+  "summary": "Parses a comma-separated list of arguments from the input tokens.",
+  "details": "The `parse_args` function is responsible for parsing a list of arguments from the input tokens. It uses a while loop to iterate over the tokens, checking for the presence of a comma or the closing parenthesis. If a comma is found, it consumes it and moves on to the next argument. If the closing parenthesis is found, it stops parsing. The function handles both positional and keyword arguments, as well as unpacking of expressions using the `*` operator.",
+  "rationale": "The function is implemented this way to allow for flexible parsing of arguments, including keyword arguments and unpacking of expressions. This allows for a wide range of possible input formats.",
+  "performance": "The function has a time complexity of O(n), where n is the number of arguments. This is because it iterates over the tokens once, consuming each one as it goes.",
   "hidden_insights": [
-    "The function uses the `peek` function to check the next token without consuming it, allowing it to handle cases where the next token is a keyword argument or an unpacking expression.",
-    "The function uses the `mk_stmt` function to create a new statement object for each argument, allowing it to handle different types of arguments (e.g. positional, keyword, unpacking)."
+    "The function uses a while loop to iterate over the tokens, which allows it to handle an arbitrary number of arguments.",
+    "The use of `std::move` to transfer ownership of the parsed arguments to the `args` vector allows for efficient memory management."
   ],
   "where_used": [
-    "The `parse_args` function is likely used in the parser module to parse function arguments.",
+    "The `parse_args` function is likely used in the parser module to parse the arguments of a function call.",
     "It may also be used in other modules that require parsing of comma-separated lists of arguments."
   ],
   "tags": [
     "parser",
     "argument parsing",
-    "token stream"
+    "token parsing"
   ],
-  "markdown": "### parse_args Function
-Parses a comma-separated list of arguments from a token stream.
-
-#### Purpose
-The `parse_args` function is responsible for parsing a list of arguments from a token stream. It uses a while loop to iterate over the tokens, consuming each argument until it encounters a closing parenthesis.
-
-#### Implementation
-The function handles both positional and keyword arguments, as well as unpacking expressions. It uses the `peek` function to check the next token without consuming it, allowing it to handle cases where the next token is a keyword argument or an unpacking expression.
-
-#### Performance
-The function has a time complexity of O(n), where n is the number of arguments in the input list.
-
-#### Usage
-The `parse_args` function is likely used in the parser module to parse function arguments. It may also be used in other modules that require parsing of comma-separated lists of arguments."
+  "markdown": "## parse_args Function\n\nParses a comma-separated list of arguments from the input tokens.\n\n### Purpose\n\nThe `parse_args` function is responsible for parsing a list of arguments from the input tokens.\n\n### Implementation\n\nThe function uses a while loop to iterate over the tokens, checking for the presence of a comma or the closing parenthesis. If a comma is found, it consumes it and moves on to the next argument. If the closing parenthesis is found, it stops parsing.\n\n### Performance\n\nThe function has a time complexity of O(n), where n is the number of arguments.\n\n### Usage\n\nThe `parse_args` function is likely used in the parser module to parse the arguments of a function call.\n\n### Tags\n\nparser, argument parsing, token parsing"

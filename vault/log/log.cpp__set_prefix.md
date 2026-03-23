@@ -4,21 +4,30 @@
 {
   "title": "Set Prefix Flag",
   "summary": "Sets the prefix flag to the specified value, synchronizing access to the flag with a mutex.",
-  "details": "This function updates the prefix flag, ensuring thread safety by locking the mutex before modifying the flag.",
-  "rationale": "The use of a mutex ensures that only one thread can modify the prefix flag at a time, preventing data corruption and ensuring thread safety.",
-  "performance": "The use of a lock_guard, which automatically unlocks the mutex when it goes out of scope, minimizes the performance impact of synchronization.",
+  "details": "This function updates the prefix flag, which is likely used to indicate whether a log message should be prefixed with a specific string. The use of a mutex ensures thread safety when accessing the flag.",
+  "rationale": "The use of a mutex is necessary to prevent concurrent modifications to the prefix flag in a multi-threaded environment.",
+  "performance": "The use of a mutex may introduce performance overhead due to the locking and unlocking operations.",
   "hidden_insights": [
-    "The use of a lock_guard simplifies error handling by automatically unlocking the mutex in case of exceptions.",
-    "The mutex is likely used to protect a shared resource, such as a log file or a configuration object."
+    "The use of a lock_guard ensures that the mutex is always unlocked when the function exits, even in the presence of exceptions.",
+    "The prefix flag is likely used to control the formatting of log messages."
   ],
   "where_used": [
     "log.cpp"
   ],
   "tags": [
-    "thread safety",
+    "thread-safety",
     "mutex",
-    "lock_guard",
-    "synchronization"
+    "log-formatting"
   ],
-  "markdown": "### Set Prefix Flag\n\nSets the prefix flag to the specified value, synchronizing access to the flag with a mutex.\n\n#### Details\n\nThis function updates the prefix flag, ensuring thread safety by locking the mutex before modifying the flag.\n\n#### Rationale\n\nThe use of a mutex ensures that only one thread can modify the prefix flag at a time, preventing data corruption and ensuring thread safety.\n\n#### Performance Considerations\n\nThe use of a lock_guard, which automatically unlocks the mutex when it goes out of scope, minimizes the performance impact of synchronization.\n\n#### Hidden Insights\n\n* The use of a lock_guard simplifies error handling by automatically unlocking the mutex in case of exceptions.\n* The mutex is likely used to protect a shared resource, such as a log file or a configuration object.\n\n#### Where Used\n\n* log.cpp"
+  "markdown": "### Set Prefix Flag
+Sets the prefix flag to the specified value, synchronizing access to the flag with a mutex.
+#### Purpose
+Updates the prefix flag to indicate whether a log message should be prefixed with a specific string.
+#### Thread Safety
+The use of a mutex ensures thread safety when accessing the prefix flag.
+#### Performance Considerations
+The use of a mutex may introduce performance overhead due to the locking and unlocking operations.
+#### Hidden Insights
+* The use of a lock_guard ensures that the mutex is always unlocked when the function exits, even in the presence of exceptions.
+* The prefix flag is likely used to control the formatting of log messages."
 }

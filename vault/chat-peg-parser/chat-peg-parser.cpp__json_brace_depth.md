@@ -9,22 +9,22 @@ Tags: #ggml #large #loop #recursion
   "rationale": "The code is implemented in this way to provide a flexible and modular system for parsing and extracting data from various chat-related formats. The use of PEG parsers allows for efficient and accurate parsing of input strings, while the modular design of the code makes it easy to add support for new formats.",
   "performance": "The code is designed to be efficient and perform well on large input strings. The use of PEG parsers and the modular design of the code help to minimize the number of operations required to parse and extract data from input strings.",
   "hidden_insights": [
-    "The code uses a combination of PEG parsers and modular design to provide a flexible and efficient system for parsing and extracting data from various chat-related formats.",
-    "The use of PEG parsers allows for efficient and accurate parsing of input strings, while the modular design of the code makes it easy to add support for new formats.",
-    "The code includes several helper functions, such as `parse_key_spec`, that provide additional functionality for parsing and extracting data from input strings."
+    "The code uses a combination of PEG parsers and a custom mapping function to parse and extract data from input strings.",
+    "The `common_chat_peg_builder` class provides methods for building PEG parsers for specific formats, allowing for easy addition of support for new formats.",
+    "The `common_chat_peg_mapper` class provides methods for mapping parsed data to a specific format, allowing for easy customization of the output format."
   ],
   "where_used": [
     "The `tagged_peg_parser` class is used to parse and extract data from tagged format strings.",
-    "The `common_chat_peg_builder` class is used to build PEG parsers for specific formats.",
-    "The `common_chat_peg_mapper` class is used to map parsed data to a specific format."
+    "The `common_chat_peg_builder` class is used to build PEG parsers for specific formats, such as JSON and tagged formats.",
+    "The `common_chat_peg_mapper` class is used to map parsed data to a specific format, such as JSON or a custom format."
   ],
   "tags": [
     "PEG Parser",
     "Chat Format",
     "JSON",
     "Tagged Format",
-    "Modular Design",
-    "Efficient Parsing"
+    "Parser",
+    "Extractor"
   ],
   "markdown": "# PEG Parser Functions
 
@@ -46,14 +46,29 @@ This code implements a PEG (Parsing Expression Grammar) parser for various chat-
 
 ### `common_chat_peg_mapper`
 
-*   `from_ast`: Maps parsed data to a specific format.
-
-## Helper Functions
-
-### `parse_key_spec`
-
-*   Parses a dot notation key into a prefix and field name.
+*   `from_ast`: Maps parsed data to a specific format, such as JSON or a custom format.
 
 ## Performance Considerations
 
-The code is designed to be efficient and perform well on large input strings. The use of PEG parsers and the modular design of the code help to minimize the number of operations required to parse and extract data from input strings."
+The code is designed to be efficient and perform well on large input strings. The use of PEG parsers and the modular design of the code help to minimize the number of operations required to parse and extract data from input strings.
+
+## Hidden Insights
+
+*   The code uses a combination of PEG parsers and a custom mapping function to parse and extract data from input strings.
+*   The `common_chat_peg_builder` class provides methods for building PEG parsers for specific formats, allowing for easy addition of support for new formats.
+*   The `common_chat_peg_mapper` class provides methods for mapping parsed data to a specific format, allowing for easy customization of the output format.
+
+## Where Used
+
+*   The `tagged_peg_parser` class is used to parse and extract data from tagged format strings.
+*   The `common_chat_peg_builder` class is used to build PEG parsers for specific formats, such as JSON and tagged formats.
+*   The `common_chat_peg_mapper` class is used to map parsed data to a specific format, such as JSON or a custom format.
+
+## Tags
+
+*   PEG Parser
+*   Chat Format
+*   JSON
+*   Tagged Format
+*   Parser
+*   Extractor"

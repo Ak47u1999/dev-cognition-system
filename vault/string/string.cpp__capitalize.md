@@ -13,13 +13,12 @@
   ],
   "where_used": [
     "string manipulation functions",
-    "text processing modules"
+    "text processing algorithms"
   ],
   "tags": [
     "string manipulation",
-    "capitalization",
     "lambda function",
     "apply_transform"
   ],
-  "markdown": "### string::capitalize()\n\nCapitalizes the first character of a string and converts the rest to lowercase.\n\nThis function uses the `apply_transform` method to apply a lambda function to the string. The lambda function checks if the string is empty, and if not, it capitalizes the first character and converts the rest to lowercase using `std::transform`.\n\n#### Performance\n\nThe performance of this function is likely to be good, as it only iterates over the string once to perform the transformation.\n\n#### Example Use Case\n\n```cpp\nstd::string s = \"hello world\";\ns = s.capitalize();\nstd::cout << s << std::endl; // Output: \"Hello world\"```"
+  "markdown": "### string::capitalize()\n\nCapitalizes the first character of a string and converts the rest to lowercase.\n\nThis function uses the `apply_transform` method to apply a lambda function to the string. The lambda function checks if the string is empty, and if not, it capitalizes the first character and converts the rest to lowercase using `std::transform`.\n\n#### Performance\n\nThe performance of this function is likely to be good, as it only iterates over the string once to perform the transformation.\n\n#### Example\n\n```cpp\nstd::string s = \"hello\";\ns = s.capitalize();\nstd::cout << s << std::endl; // prints \"Hello\"\n```"
 }

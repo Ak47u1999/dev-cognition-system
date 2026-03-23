@@ -5,39 +5,35 @@ Tags: #ggml #loop
 ```json
 {
   "title": "ggml_vec_dot_mxfp4_q8_0",
-  "summary": "Computes the dot product of two vectors using SIMD instructions, specifically optimized for Power9 vector architecture.",
-  "details": "This function calculates the dot product of two vectors, x and y, where x is a vector of MXFP4 (16-bit floating-point) numbers and y is a vector of Q8_0 (8-bit signed integer) numbers. The function uses SIMD instructions to perform the computation in parallel, taking advantage of the Power9 vector architecture. The result is stored in the variable s.",
-  "rationale": "The function is implemented in this way to take advantage of the Power9 vector architecture's capabilities, which include support for 128-bit vectors and various SIMD instructions. By using these instructions, the function can perform the dot product computation in parallel, resulting in significant performance improvements.",
-  "performance": "The function's performance is optimized for the Power9 vector architecture, making it suitable for use in applications that require high-performance vector operations. However, the function also includes a generic implementation for other architectures, ensuring that it can still be used in a variety of environments.",
+  "summary": "Computes the dot product of two vectors, x and y, where x is of type block_mxfp4 and y is of type block_q8_0.",
+  "details": "This function is designed to compute the dot product of two vectors, x and y, where x is of type block_mxfp4 and y is of type block_q8_0. It uses SIMD instructions to optimize performance. The function takes several parameters, including the number of elements in the vectors (n), the vectors themselves (x and y), and the block size (bs). It returns the dot product of the two vectors in the variable s.",
+  "rationale": "The function is implemented using SIMD instructions to take advantage of the parallel processing capabilities of modern CPUs. This is particularly useful for large vectors, where the dot product can be computed much faster using SIMD instructions than using scalar operations.",
+  "performance": "The function has a time complexity of O(n), where n is the number of elements in the vectors. This is because the function uses SIMD instructions to compute the dot product in parallel, which reduces the number of operations required. The function also uses caching to improve performance.",
   "hidden_insights": [
-    "The function uses the `vec_perm` instruction to permute the bits of the Q8_0 numbers, allowing it to extract the high and low nibbles of the numbers.",
-    "The function uses the `vec_mule` and `vec_mulo` instructions to multiply the Q8_0 numbers by the MXFP4 numbers, taking advantage of the Power9 vector architecture's support for multiply-accumulate operations."
+    "The function uses a static assertion to ensure that QK_MXFP4 and QK8_0 are the same.",
+    "The function uses SIMD instructions to compute the dot product in parallel, which reduces the number of operations required.",
+    "The function uses caching to improve performance."
   ],
   "where_used": [
-    "ggml_vec_dot_mxfp4_q8_0_generic",
-    "other functions that require high-performance vector operations"
+    "This function is likely to be used in applications that require the computation of dot products between large vectors.",
+    "It may be used in machine learning or scientific computing applications, where the dot product is a common operation."
   ],
   "tags": [
     "SIMD",
-    "Power9",
-    "vector operations",
     "dot product",
-    "MXFP4",
-    "Q8_0"
+    "vector operations",
+    "performance optimization"
   ],
   "markdown": "## ggml_vec_dot_mxfp4_q8_0
-Computes the dot product of two vectors using SIMD instructions, specifically optimized for Power9 vector architecture.
-
 ### Summary
-This function calculates the dot product of two vectors, x and y, where x is a vector of MXFP4 (16-bit floating-point) numbers and y is a vector of Q8_0 (8-bit signed integer) numbers.
+Computes the dot product of two vectors, x and y, where x is of type block_mxfp4 and y is of type block_q8_0.
 
 ### Details
-The function uses SIMD instructions to perform the computation in parallel, taking advantage of the Power9 vector architecture. The result is stored in the variable s.
+This function is designed to compute the dot product of two vectors, x and y, where x is of type block_mxfp4 and y is of type block_q8_0. It uses SIMD instructions to optimize performance.
 
 ### Performance
-The function's performance is optimized for the Power9 vector architecture, making it suitable for use in applications that require high-performance vector operations.
+The function has a time complexity of O(n), where n is the number of elements in the vectors. This is because the function uses SIMD instructions to compute the dot product in parallel, which reduces the number of operations required.
 
-### Hidden Insights
-* The function uses the `vec_perm` instruction to permute the bits of the Q8_0 numbers, allowing it to extract the high and low nibbles of the numbers.
-* The function uses the `vec_mule` and `vec_mulo` instructions to multiply the Q8_0 numbers by the MXFP4 numbers, taking advantage of the Power9 vector architecture's support for multiply-accumulate operations."
+### Where Used
+This function is likely to be used in applications that require the computation of dot products between large vectors. It may be used in machine learning or scientific computing applications, where the dot product is a common operation."
 }

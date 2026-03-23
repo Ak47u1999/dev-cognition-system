@@ -12,7 +12,7 @@
   ],
   "where_used": [
     "Parser implementation",
-    "Lexer or tokenizer code"
+    "Lexer or tokenizer"
   ],
   "tags": [
     "parser",

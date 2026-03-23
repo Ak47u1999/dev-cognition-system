@@ -2,37 +2,23 @@
 
 ```json
 {
-  "title": "Progress Bar Updater",
-  "summary": "Updates a progress bar on a terminal, displaying the current progress and estimated completion time.",
-  "details": "This function updates a progress bar on a terminal by calculating the current progress and displaying it as a percentage. It also displays the current and total sizes in megabytes. The progress bar is updated by moving the cursor to the correct position and printing the updated bar.",
-  "rationale": "The function uses a mutex to ensure thread safety, and it checks if the output is a terminal before updating the progress bar. This is likely to prevent issues with non-terminal outputs.",
-  "performance": "The function uses a lock_guard to ensure that the mutex is released when the function exits, which helps to prevent deadlocks. It also uses the flush function to ensure that the output is displayed immediately.",
+  "title": "Progress Bar Update Function",
+  "summary": "Updates a progress bar in a terminal, displaying the current progress and estimated completion time.",
+  "details": "This function updates a progress bar in a terminal by calculating the current progress and displaying it as a percentage. It also displays the current and total sizes in megabytes. The progress bar is updated by moving the cursor to the correct position and printing the updated bar.",
+  "rationale": "The function is implemented this way to provide a clear and concise progress bar in a terminal. The use of ANSI escape codes allows for precise control over the cursor position and the appearance of the progress bar.",
+  "performance": "The function has a time complexity of O(1), making it efficient for large progress bars. However, the use of std::lock_guard may introduce a small overhead due to the mutex locking.",
   "hidden_insights": [
-    "The function uses ANSI escape codes to move the cursor and clear the line, which is a common technique for updating progress bars in terminals.",
-    "The function uses a string of '=' characters to represent the progress bar, which is a simple but effective way to display the progress."
+    "The function uses the \033[s and \033[u ANSI escape codes to save and restore the cursor position, allowing for precise control over the progress bar.",
+    "The function uses the \033[A ANSI escape code to move the cursor up by a specified number of lines, allowing for the progress bar to be updated correctly."
   ],
   "where_used": [
     "download.cpp"
   ],
   "tags": [
     "progress bar",
-    "terminal output",
-    "thread safety",
+    "terminal",
+    "ANSI escape codes",
     "mutex"
   ],
-  "markdown": "### Progress Bar Updater
-Updates a progress bar on a terminal, displaying the current progress and estimated completion time.
-
-#### Details
-This function updates a progress bar on a terminal by calculating the current progress and displaying it as a percentage. It also displays the current and total sizes in megabytes.
-
-#### Rationale
-The function uses a mutex to ensure thread safety, and it checks if the output is a terminal before updating the progress bar.
-
-#### Performance Considerations
-The function uses a lock_guard to ensure that the mutex is released when the function exits, which helps to prevent deadlocks. It also uses the flush function to ensure that the output is displayed immediately.
-
-#### Hidden Insights
-* The function uses ANSI escape codes to move the cursor and clear the line, which is a common technique for updating progress bars in terminals.
-* The function uses a string of '=' characters to represent the progress bar, which is a simple but effective way to display the progress."
+  "markdown": "## Progress Bar Update Function\n\nUpdates a progress bar in a terminal, displaying the current progress and estimated completion time.\n\n### Details\n\nThis function updates a progress bar in a terminal by calculating the current progress and displaying it as a percentage. It also displays the current and total sizes in megabytes. The progress bar is updated by moving the cursor to the correct position and printing the updated bar.\n\n### Rationale\n\nThe function is implemented this way to provide a clear and concise progress bar in a terminal. The use of ANSI escape codes allows for precise control over the cursor position and the appearance of the progress bar.\n\n### Performance\n\nThe function has a time complexity of O(1), making it efficient for large progress bars. However, the use of `std::lock_guard` may introduce a small overhead due to the mutex locking.\n\n### Hidden Insights\n\n* The function uses the `\033[s` and `\033[u` ANSI escape codes to save and restore the cursor position, allowing for precise control over the progress bar.\n* The function uses the `\033[A` ANSI escape code to move the cursor up by a specified number of lines, allowing for the progress bar to be updated correctly.\n\n### Where Used\n\n* `download.cpp`"
 }

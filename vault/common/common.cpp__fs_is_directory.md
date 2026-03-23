@@ -19,4 +19,4 @@
     "path",
     "std::filesystem"
   ],
-  "markdown": "### fs_is_directory\n\nChecks if a given path is a directory.\n\nThis function takes a path as input and returns true if it exists and is a directory, false otherwise.\n\n#### Parameters\n\n* `path`: The path to check.\n\n#### Returns\n\n* `bool`: True if the path exists and is a directory, false otherwise.\n\n#### Example\n\n```cpp\nif (fs_is_directory(\"/path/to/directory\")) {\n    // directory exists and is a directory\n}\n```"
+  "markdown": "### fs_is_directory\n\nChecks if a given path is a directory.\n\nThis function takes a path as input and returns true if it exists and is a directory, false otherwise.\n\n#### Parameters\n\n* `path`: The path to check.\n\n#### Returns\n\n* `bool`: True if the path exists and is a directory, false otherwise.\n\n#### Example\n\n```cpp\nif (fs_is_directory(\"/path/to/directory\")) {\n    // directory exists\n}\n```"

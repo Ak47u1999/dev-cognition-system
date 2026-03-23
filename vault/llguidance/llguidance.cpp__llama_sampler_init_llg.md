@@ -1,25 +1,56 @@
 # llguidance.cpp__llama_sampler_init_llg
 
+Tags: #ggml #memory
+
 ```json
 {
   "title": "llama_sampler_init_llg",
-  "summary": "Initializes a llama_sampler object for llguidance, but returns nullptr due to llguidance being disabled.",
-  "details": "This function is a part of the llama_sampler initialization process. It checks if llguidance is enabled and, if not, logs a warning and returns a nullptr. This suggests that llguidance is an optional feature that can be enabled at compile-time.",
-  "rationale": "The function returns nullptr when llguidance is disabled to indicate that the feature is not available. This allows the caller to handle the situation accordingly.",
-  "performance": "The performance impact of this function is minimal, as it only logs a warning and returns a nullptr.",
+  "summary": "Initializes a llama_sampler instance with LLG (LLaMA Guidance) settings.",
+  "details": "This function creates a new llama_sampler instance with LLG settings, including a tokenizer and grammar data. It checks if grammar data is provided and initializes the tokenizer and grammar accordingly.",
+  "rationale": "The function is implemented this way to allow for flexible initialization of the llama_sampler instance with or without grammar data.",
+  "performance": "The function has a time complexity of O(1) since it only performs a few constant-time operations. However, the llama_sampler_llg_new_tokenizer and llama_sampler_llg_new functions may have a higher time complexity.",
   "hidden_insights": [
-    "The function uses a LOG_WRN macro to log a warning, which may be a custom logging mechanism.",
-    "The function returns a nullptr, which can be used to indicate that the feature is not available."
+    "The function uses a pointer to a tokenizer object, which may be a performance optimization to avoid copying the tokenizer object.",
+    "The function checks if the grammar data is provided and initializes the tokenizer and grammar accordingly, which may be a design choice to allow for flexible initialization."
   ],
   "where_used": [
-    "Other parts of the llama_sampler initialization process",
-    "Modules that rely on llguidance being enabled"
+    "llama_sampler_init",
+    "llama_sampler_llg_new_tokenizer",
+    "llama_sampler_llg_new"
   ],
   "tags": [
     "llama_sampler",
-    "llguidance",
-    "initialization",
-    "optional feature"
+    "LLG",
+    "tokenizer",
+    "grammar"
   ],
-  "markdown": "## llama_sampler_init_llg\n\nInitializes a llama_sampler object for llguidance, but returns nullptr due to llguidance being disabled.\n\nThis function is a part of the llama_sampler initialization process. It checks if llguidance is enabled and, if not, logs a warning and returns a nullptr. This suggests that llguidance is an optional feature that can be enabled at compile-time.\n\n### Rationale\n\nThe function returns nullptr when llguidance is disabled to indicate that the feature is not available. This allows the caller to handle the situation accordingly.\n\n### Performance\n\nThe performance impact of this function is minimal, as it only logs a warning and returns a nullptr.\n\n### Hidden Insights\n\n* The function uses a LOG_WRN macro to log a warning, which may be a custom logging mechanism.\n* The function returns a nullptr, which can be used to indicate that the feature is not available.\n\n### Where Used\n\n* Other parts of the llama_sampler initialization process\n* Modules that rely on llguidance being enabled\n\n### Tags\n\n* llama_sampler\n* llguidance\n* initialization\n* optional feature"
+  "markdown": "## llama_sampler_init_llg
+Initializes a llama_sampler instance with LLG settings.
+
+### Summary
+This function creates a new llama_sampler instance with LLG settings, including a tokenizer and grammar data.
+
+### Details
+The function checks if grammar data is provided and initializes the tokenizer and grammar accordingly.
+
+### Rationale
+The function is implemented this way to allow for flexible initialization of the llama_sampler instance with or without grammar data.
+
+### Performance
+The function has a time complexity of O(1) since it only performs a few constant-time operations. However, the llama_sampler_llg_new_tokenizer and llama_sampler_llg_new functions may have a higher time complexity.
+
+### Hidden Insights
+* The function uses a pointer to a tokenizer object, which may be a performance optimization to avoid copying the tokenizer object.
+* The function checks if the grammar data is provided and initializes the tokenizer and grammar accordingly, which may be a design choice to allow for flexible initialization.
+
+### Where Used
+* llama_sampler_init
+* llama_sampler_llg_new_tokenizer
+* llama_sampler_llg_new
+
+### Tags
+* llama_sampler
+* LLG
+* tokenizer
+* grammar"
 }

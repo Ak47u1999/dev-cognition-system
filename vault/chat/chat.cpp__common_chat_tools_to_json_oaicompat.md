@@ -6,38 +6,40 @@ Tags: #ggml #large #loop #memory
 {
   "title": "Common Chat Functions",
   "summary": "This module contains various functions for working with chat tools, templates, and messages. It provides functionality for formatting chat messages, verifying templates, and converting chat tools to JSON.",
-  "details": "The common chat functions are designed to work with the llama model and provide a set of tools for formatting and verifying chat messages. The functions include common_chat_format_single, common_chat_format_example, common_chat_verify_template, and common_chat_templates_init.",
-  "rationale": "The common chat functions are implemented to provide a set of reusable tools for working with chat messages and templates. They are designed to be flexible and customizable, allowing users to easily integrate them into their own applications.",
-  "performance": "The performance of the common chat functions is generally good, with most functions completing in a matter of milliseconds. However, the common_chat_templates_init function may take longer to complete if the chat template is large or complex.",
+  "details": "The common_chat module is a collection of functions that facilitate working with chat tools, templates, and messages. It includes functions for formatting chat messages, verifying templates, and converting chat tools to JSON. The module is designed to be flexible and adaptable to different chat formats and templates.",
+  "rationale": "The common_chat module is implemented to provide a centralized location for chat-related functionality. This allows for easier maintenance and updates of chat-related code. The module's design also enables it to be easily extended or modified to accommodate new chat formats or templates.",
+  "performance": "The performance of the common_chat module is generally good, as it uses efficient data structures and algorithms. However, the performance may degrade if the chat templates or tools are complex or large.",
   "hidden_insights": [
-    "The common chat functions use a combination of llama model and template-based approaches to provide a flexible and customizable solution for formatting and verifying chat messages.",
-    "The common_chat_templates_init function uses a temporary hack to prevent chat templates from throwing an error, which may have performance implications.",
-    "The common chat functions use a set of static functions to provide a way to iterate over the tools and parameters of a chat tool."
+    "The common_chat module uses a combination of C++ and JSON to represent chat tools and templates.",
+    "The module's functions are designed to be flexible and adaptable to different chat formats and templates.",
+    "The module includes a function for verifying templates, which can help prevent errors or unexpected behavior."
   ],
   "where_used": [
-    "The common chat functions are likely used in a variety of applications, including chatbots, virtual assistants, and other conversational AI systems.",
-    "The functions may be used in conjunction with the llama model to provide a flexible and customizable solution for formatting and verifying chat messages."
+    "The common_chat module is likely used in various parts of the codebase, including chat-related functions and templates.",
+    "The module's functions may be called from other modules or functions that require chat-related functionality."
   ],
   "tags": [
     "chat",
-    "llama",
     "templates",
     "messages",
-    "functions"
+    "tools",
+    "JSON"
   ],
-  "markdown": "### Common Chat Functions
-#### Overview
-The common chat functions are a set of reusable tools for working with chat messages and templates. They provide a flexible and customizable solution for formatting and verifying chat messages.
+  "markdown": "## Common Chat Functions
+### Overview
+The common_chat module contains various functions for working with chat tools, templates, and messages. It provides functionality for formatting chat messages, verifying templates, and converting chat tools to JSON.
 
-#### Functions
-* `common_chat_format_single`: Formats a single chat message using a given template.
-* `common_chat_format_example`: Formats an example chat message using a given template.
-* `common_chat_verify_template`: Verifies a chat template using a given model.
-* `common_chat_templates_init`: Initializes a chat template using a given model and template.
-
-#### Usage
-The common chat functions can be used in a variety of applications, including chatbots, virtual assistants, and other conversational AI systems. They provide a flexible and customizable solution for formatting and verifying chat messages.
-
-#### Performance
-The performance of the common chat functions is generally good, with most functions completing in a matter of milliseconds. However, the `common_chat_templates_init` function may take longer to complete if the chat template is large or complex."
+### Functions
+* `common_chat_format_single`: Formats a single chat message based on a template and a list of past messages.
+* `common_chat_format_example`: Formats an example chat message based on a template and a list of chat template keywords.
+* `common_chat_verify_template`: Verifies a chat template by applying it to a test message.
+* `common_chat_templates_init`: Initializes a chat template based on a model and a chat template override.
+* `common_chat_templates_free`: Frees a chat template.
+* `common_chat_templates_was_explicit`: Checks if a chat template was explicitly provided.
+* `common_chat_templates_source`: Returns the source of a chat template.
+* `common_chat_format_name`: Returns the name of a chat format.
+* `common_reasoning_format_name`: Returns the name of a reasoning format.
+* `common_reasoning_format_from_name`: Converts a reasoning format name to a format enum.
+* `foreach_function`: Iterates over a list of chat tools and applies a function to each tool.
+* `foreach_parameter`: Iterates over a list of chat tool parameters and applies a function to each parameter."
 }

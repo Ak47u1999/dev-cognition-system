@@ -24,5 +24,15 @@ Tags: #loop
     "map",
     "string"
   ],
-  "markdown": "### caps utility functions\n\nThe caps utility functions provide methods to print statistics and convert the caps object to a map or string representation.\n\n#### caps_print_stats function\n\nPrints the statistics of a given value, including the type and operations used.\n\n#### to_map function\n\nReturns a map of boolean values representing the capabilities of the caps object.\n\n#### to_string function\n\nReturns a string representation of the caps object.\n\n### Performance Considerations\n\nThe functions have a time complexity of O(n) for caps_print_stats, where n is the number of operations, and O(k) for to_map and to_string, where k is the number of capabilities.\n\n### Hidden Insights\n\n* The caps_print_stats function uses a stringstream to build the debug message, which can improve performance by avoiding repeated string concatenations.\n* The to_map function uses a range-based for loop to iterate over the map, which can improve readability and reduce the risk of off-by-one errors."
+  "markdown": "### caps utility functions
+The caps utility functions provide methods to print statistics and convert the caps object to a map or string representation.
+
+#### caps_print_stats
+Prints the statistics of a given value.
+
+#### to_map
+Returns a map of boolean values representing the capabilities of the caps object.
+
+#### to_string
+Returns a string representation of the caps object."
 }

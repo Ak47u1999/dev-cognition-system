@@ -28,7 +28,7 @@ Converts a UTF-8 encoded string to a wide string.
 This function takes a UTF-8 encoded string and returns its equivalent wide string representation.
 
 #### Parameters
-* `str`: The UTF-8 encoded string to convert.
+* `str`: The UTF-8 encoded string to be converted.
 
 #### Returns
 The wide string representation of the input string.
