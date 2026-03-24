@@ -14,14 +14,12 @@ import argparse
 import threading
 import warnings
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Suppress FutureWarning from tree-sitter
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 sys.path.insert(0, os.path.dirname(__file__))
+import config
 
 from ai.groq_client import query_groq
 from ai.prompts import build_prompt
@@ -134,7 +132,7 @@ def main():
     p = argparse.ArgumentParser(description="Batch-analyze all C files in a repository.")
     p.add_argument("--repo", "-r", required=True, help="Path to the repository root")
     p.add_argument("--vault", "-v",
-                   default=os.getenv("VAULT_PATH", os.path.join(os.getcwd(), "vault")),
+                   default=config.VAULT_PATH,
                    help="Obsidian vault output directory")
     p.add_argument("--workers", "-w", type=int, default=1,
                    help="Number of concurrent Groq workers (default: 1; rate-lock serialises anyway)")

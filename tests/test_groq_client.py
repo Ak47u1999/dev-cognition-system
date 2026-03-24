@@ -125,5 +125,101 @@ class TestQueryGroqMockMode(unittest.TestCase):
         self.assertEqual(result, expected_content)
 
 
+class TestQueryGroq429Retry(unittest.TestCase):
+    """429 responses must be retried with backoff, not immediately fall back."""
+
+    def _make_429(self, retry_after=None):
+        resp = MagicMock()
+        resp.status_code = 429
+        resp.raise_for_status.return_value = None
+        headers = {}
+        if retry_after is not None:
+            headers["retry-after"] = retry_after
+        resp.headers = headers
+        return resp
+
+    def _make_200(self, content="ok"):
+        resp = MagicMock()
+        resp.status_code = 200
+        resp.raise_for_status.return_value = None
+        resp.json.return_value = {"choices": [{"message": {"content": content}}]}
+        return resp
+
+    @patch('time.sleep', return_value=None)
+    def test_retries_after_429_and_succeeds(self, mock_sleep):
+        """After one 429, the next call should succeed and return real content."""
+        expected = json.dumps({"title": "add"})
+        side_effects = [self._make_429(), self._make_200(expected)]
+
+        with patch.object(groq_client, 'MOCK', False):
+            with patch.object(groq_client, 'GROQ_API_KEY', 'fake-key'):
+                with patch.object(groq_client, '_rate_limited_post', side_effect=side_effects):
+                    result = groq_client.query_groq(SAMPLE_PROMPT)
+
+        self.assertEqual(result, expected)
+        mock_sleep.assert_called()  # must have waited before retrying
+
+    @patch('time.sleep', return_value=None)
+    def test_uses_retry_after_header_numeric(self, mock_sleep):
+        """retry-after: "20" should sleep for 20 seconds."""
+        resp_429 = self._make_429(retry_after="20")
+        resp_200 = self._make_200("content")
+
+        with patch.object(groq_client, 'MOCK', False):
+            with patch.object(groq_client, 'GROQ_API_KEY', 'fake-key'):
+                with patch.object(groq_client, '_rate_limited_post',
+                                  side_effect=[resp_429, resp_200]):
+                    groq_client.query_groq(SAMPLE_PROMPT)
+
+        mock_sleep.assert_any_call(20.0)
+
+    @patch('time.sleep', return_value=None)
+    def test_uses_retry_after_header_with_s_suffix(self, mock_sleep):
+        """retry-after: "10s" (string with suffix) should parse to 10.0."""
+        resp_429 = self._make_429(retry_after="10s")
+        resp_200 = self._make_200("content")
+
+        with patch.object(groq_client, 'MOCK', False):
+            with patch.object(groq_client, 'GROQ_API_KEY', 'fake-key'):
+                with patch.object(groq_client, '_rate_limited_post',
+                                  side_effect=[resp_429, resp_200]):
+                    groq_client.query_groq(SAMPLE_PROMPT)
+
+        mock_sleep.assert_any_call(10.0)
+
+    @patch('time.sleep', return_value=None)
+    def test_falls_back_after_max_retries_exhausted(self, mock_sleep):
+        """If every attempt returns 429, fall back gracefully after max retries."""
+        with patch.object(groq_client, 'MOCK', False):
+            with patch.object(groq_client, 'GROQ_API_KEY', 'fake-key'):
+                with patch.object(groq_client, '_rate_limited_post',
+                                  return_value=self._make_429()):
+                    with patch.object(groq_client, '_MAX_RETRIES', 3):
+                        result = groq_client.query_groq(SAMPLE_PROMPT)
+
+        data = json.loads(result)
+        self.assertIsInstance(data, dict)  # graceful fallback, not an exception
+
+    @patch('time.sleep', return_value=None)
+    def test_exponential_backoff_without_header(self, mock_sleep):
+        """Without a retry-after header, backoff should grow exponentially."""
+        resp_429_1 = self._make_429()  # no header
+        resp_429_2 = self._make_429()
+        resp_200 = self._make_200("ok")
+
+        with patch.object(groq_client, 'MOCK', False):
+            with patch.object(groq_client, 'GROQ_API_KEY', 'fake-key'):
+                with patch.object(groq_client, '_RETRY_BASE', 5.0):
+                    with patch.object(groq_client, '_rate_limited_post',
+                                      side_effect=[resp_429_1, resp_429_2, resp_200]):
+                        groq_client.query_groq(SAMPLE_PROMPT)
+
+        sleep_calls = [c.args[0] for c in mock_sleep.call_args_list]
+        # attempt 0 → 5*2^0=5, attempt 1 → 5*2^1=10
+        self.assertIn(5.0, sleep_calls)
+        self.assertIn(10.0, sleep_calls)
+
+
 if __name__ == "__main__":
     unittest.main()
+

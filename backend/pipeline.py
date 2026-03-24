@@ -4,9 +4,7 @@ import json
 import argparse
 import re
 from typing import Optional
-from dotenv import load_dotenv
-
-load_dotenv()
+import config
 
 from ai.groq_client import query_groq
 from ai.prompts import build_prompt
@@ -79,7 +77,7 @@ def analyze_file(source_path: str, vault_path: str, use_groq: bool = True,
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--source", "-s", default="backend/sample.c", help="C source file to analyze")
-    p.add_argument("--vault", "-v", default=os.getenv("VAULT_PATH", os.path.join(os.getcwd(), "vault")), help="Obsidian vault path")
+    p.add_argument("--vault", "-v", default=config.VAULT_PATH, help="Obsidian vault path")
     p.add_argument("--no-groq", action="store_true", help="Do not call Groq; save prompts instead")
     p.add_argument("--max", type=int, help="Max functions to process")
     p.add_argument("--skip-existing", action="store_true", default=True, help="Skip functions already saved to vault (default: True)")

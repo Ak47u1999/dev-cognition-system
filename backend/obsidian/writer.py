@@ -1,8 +1,12 @@
-import os
 import re
 from datetime import datetime
 
-VAULT_PATH = os.getenv("VAULT_PATH", os.path.join(os.getcwd(), "vault"))
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import config
+
+VAULT_PATH = config.VAULT_PATH
 
 
 def _ensure_vault(path: str):

@@ -1,4 +1,3 @@
-import os
 import time
 import threading
 import requests
@@ -6,18 +5,22 @@ from typing import Optional
 import json
 import re
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_URL = os.getenv("GROQ_URL", "https://api.groq.com/openai/v1/chat/completions")
-DEFAULT_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
-MOCK = os.getenv("MOCK_GROQ", "0").lower() in ("1", "true", "yes")
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import config
 
-_MAX_RETRIES = 6
-_RETRY_BASE = 5.0  # seconds base for exponential backoff on 429
+GROQ_API_KEY = config.GROQ_API_KEY
+GROQ_URL = config.GROQ_URL
+DEFAULT_MODEL = config.GROQ_MODEL
+MOCK = config.MOCK_GROQ
 
-# Global rate limiter: enforce minimum interval between API calls across all threads
-# llama-3.1-8b-instant free tier: ~30 req/min → 1 req per 2.5s to be safe
+_MAX_RETRIES = 8
+_RETRY_BASE = 15.0  # seconds base for exponential backoff on 429
+
+# Global rate limiter: enforces minimum interval between API calls across all threads
 _RATE_LOCK = threading.Lock()
-_MIN_INTERVAL = float(os.getenv("GROQ_MIN_INTERVAL", "12"))
+_MIN_INTERVAL = config.GROQ_MIN_INTERVAL
 _last_call_time: float = 0.0
 
 
@@ -109,14 +112,15 @@ def query_groq(prompt: str, system: Optional[str] = "You are a senior systems en
         try:
             resp = _rate_limited_post(headers, payload, timeout)
             if resp.status_code == 429:
-                retry_after = resp.headers.get("retry-after") or resp.headers.get("x-ratelimit-reset-requests")
-                if retry_after:
-                    wait = float(retry_after)
-                else:
+                raw = resp.headers.get("retry-after") or resp.headers.get("x-ratelimit-reset-requests")
+                try:
+                    # header may be "10" or "10s" or "10.5s"
+                    wait = float(str(raw).rstrip("s")) if raw else _RETRY_BASE * (2 ** attempt)
+                except ValueError:
                     wait = _RETRY_BASE * (2 ** attempt)
-                if attempt < _MAX_RETRIES - 1:
-                    time.sleep(wait)
-                    continue
+                print(f"[groq] 429 rate-limited — waiting {wait:.1f}s (attempt {attempt + 1}/{_MAX_RETRIES})")
+                time.sleep(wait)
+                continue
             resp.raise_for_status()
             data = resp.json()
             try:

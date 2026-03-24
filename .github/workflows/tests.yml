@@ -1,0 +1,38 @@
+name: Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Create stub .env for tests
+        run: |
+          cat > .env <<EOF
+          GROQ_API_KEY=test-key-not-used
+          GROQ_MODEL=qwen/qwen3-32b
+          GROQ_MIN_INTERVAL=10
+          MOCK_GROQ=1
+          VAULT_PATH=./vault
+          EOF
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests -v
