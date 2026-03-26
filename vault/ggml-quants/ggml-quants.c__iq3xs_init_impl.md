@@ -1,0 +1,13 @@
+# ggml-quants.c__iq3xs_init_impl
+
+Tags: #loop #memory
+
+## iq3xs_init_impl
+
+Auto-generated analysis for iq3xs_init_impl.
+
+- Performs heap allocations or raw memory operations.
+- Contains loops — consider iteration cost and early exits.
+
+**Note:** Groq API error: {"error":{"message":"Request too large for model `qwen/qwen3-32b` in organization `org_01km7pyyvqezc9axbp4yv9qe63` service tier `on_demand` on tokens per minute (TPM): Limit 6000, Requested 7411, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+
