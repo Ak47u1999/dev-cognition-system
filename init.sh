@@ -5,14 +5,14 @@
 #   1. Checks Python 3 is available
 #   2. Creates a virtualenv (venv/) if one doesn't exist
 #   3. Installs / upgrades Python dependencies from requirements.txt
-#   4. Copies .env.example → .env if no .env is present, then prompts for GROQ_API_KEY
+#   4. Creates .env pre-configured for local Ollama (qwen2.5-coder:14b)
 #   5. Clones external/llama.cpp if missing, or pulls latest if already present
 #   6. Hands off to analyze.sh (all extra args are forwarded)
 #
 # Usage:
 #   ./init.sh                   # full setup + analyze
 #   ./init.sh --no-groq         # setup + offline/mock run
-#   ./init.sh --workers 3       # setup + analyze with 3 workers
+#   ./init.sh --workers 4       # setup + analyze with 4 workers
 
 set -euo pipefail
 
@@ -73,29 +73,24 @@ success "Dependencies ready."
 
 # ── 4. .env setup ────────────────────────────────────────────────────────────
 if [ ! -f ".env" ]; then
-    warn ".env not found — copying from .env.example"
+    warn ".env not found — our .env is pre-configured for local Ollama."
     cp .env.example .env
 
-    echo ""
-    echo "  ┌─────────────────────────────────────────────────────┐"
-    echo "  │  A Groq API key is required to run analysis.        │"
-    echo "  │  Get a free key at: https://console.groq.com        │"
-    echo "  └─────────────────────────────────────────────────────┘"
-    echo ""
+    # Overwrite with local Ollama settings
+    cat > .env << 'ENVEOF'
+# Local Ollama — OpenAI-compatible endpoint
+GROQ_API_KEY=ollama
+GROQ_URL=http://localhost:11434/v1/chat/completions
+GROQ_MODEL=qwen2.5-coder:14b
+GROQ_MIN_INTERVAL=0
 
-    # If running interactively, prompt; otherwise skip and warn
-    if [ -t 0 ]; then
-        read -r -p "  Enter your GROQ_API_KEY (or press Enter to skip): " GROQ_KEY
-        if [ -n "$GROQ_KEY" ]; then
-            # Replace the placeholder in .env
-            sed -i "s/^GROQ_API_KEY=.*/GROQ_API_KEY=${GROQ_KEY}/" .env
-            success "GROQ_API_KEY saved to .env"
-        else
-            warn "Skipped — edit .env manually before analyzing."
-        fi
-    else
-        warn "Non-interactive shell — edit .env and add your GROQ_API_KEY before running."
-    fi
+# Output vault
+VAULT_PATH=./vault
+
+# Set to 1 to skip LLM calls and use heuristic fallback
+MOCK_GROQ=0
+ENVEOF
+    success ".env created with local Ollama settings."
 else
     info ".env already present, skipping."
 fi

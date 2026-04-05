@@ -124,7 +124,11 @@ def query_groq(prompt: str, system: Optional[str] = "You are a senior systems en
             resp.raise_for_status()
             data = resp.json()
             try:
-                return data["choices"][0]["message"]["content"]
+                content = data["choices"][0]["message"]["content"]
+                # Strip markdown code fences (```json ... ``` or ``` ... ```)
+                content = re.sub(r"^```[a-zA-Z]*\n?", "", content.strip())
+                content = re.sub(r"\n?```$", "", content.strip())
+                return content.strip()
             except Exception as e:
                 return _fallback_response_from_prompt(prompt, error=f"unexpected-structure:{e}")
         except requests.HTTPError as e:
