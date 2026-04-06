@@ -1,6 +1,6 @@
 # Dev Cognition System
 
-> **AI-powered C/C++ code intelligence pipeline** — transforms raw source repositories into a richly annotated [Obsidian](https://obsidian.md) knowledge base using [Groq](https://groq.com) LLMs.
+> **AI-powered C/C++ code intelligence pipeline** — transforms raw source repositories into a richly annotated [Obsidian](https://obsidian.md) knowledge base using local [Ollama](https://ollama.com) LLMs.
 
 ---
 
@@ -21,18 +21,18 @@
 
 ## What It Does
 
-Dev Cognition System ingests a C/C++ source repository (e.g. [llama.cpp](https://github.com/ggerganov/llama.cpp)), extracts every function, sends each one to a Groq LLM for deep semantic analysis, and writes structured Obsidian markdown notes to a local vault.
+Dev Cognition System ingests a C/C++ source repository (e.g. [llama.cpp](https://github.com/ggerganov/llama.cpp)), extracts every function, sends each one to a local Ollama LLM for deep semantic analysis, and writes structured Obsidian markdown notes to a local vault.
 
-**End result:** a searchable, AI-annotated knowledge base of every function in a large codebase — perfect for onboarding, code review, and architectural understanding.
+**End result:** a searchable, AI-annotated knowledge base of every function in a large codebase — perfect for onboarding, code review, and architectural understanding. Runs entirely offline — no API keys or cloud accounts required.
 
 Key capabilities:
 - 🔍 **Accurate function extraction** via [Tree-Sitter](https://tree-sitter.github.io) (with regex fallback)
 - 🤖 **Deep LLM analysis** — summary, rationale, performance notes, hidden insights, call sites
 - 🏷️ **Automatic tagging** — `#memory`, `#gpu`, `#loop`, `#recursion`, `#kernel`, `#threading`, and more
 - ⚡ **Concurrent processing** — multi-threaded batch pipeline with configurable workers
-- 🔄 **Rate-limit aware** — exponential backoff, up to 6 retries, thread-safe Groq client
+- 🔒 **Fully local** — all inference via [Ollama](https://ollama.com), no data leaves your machine
 - 💾 **Incremental runs** — skip already-analyzed functions with `--skip-existing`
-- 🧪 **Offline mode** — `MOCK_GROQ=1` uses heuristic fallback without any API calls
+- 🧪 **Offline mode** — `MOCK_LLM=1` uses heuristic fallback without any LLM calls
 
 ---
 
@@ -63,9 +63,9 @@ C/C++ Source Repo
                                                 │
                                                 ▼
                                        ┌─────────────────┐
-                                       │   Groq API      │
-                                       │  llama-3.1-8b   │
-                                       │  (rate-limited) │
+                                       │   Ollama API    │
+                                       │ qwen2.5-coder   │
+                                       │  (local, fast)  │
                                        └────────┬────────┘
                                                 │  JSON response
                                                 ▼
@@ -94,7 +94,7 @@ dev-cognition-system/
 │   ├── main.py               # Minimal single-file entry point (dev/testing)
 │   ├── sample.c              # Sample C file for testing the parser
 │   ├── ai/
-│   │   ├── groq_client.py    # Groq API client (rate limiting, retries, fallback)
+│   │   ├── ollama_client.py  # Ollama local inference client (retries, fallback)
 │   │   ├── prompts.py        # LLM prompt templates
 │   │   └── tagger.py         # Heuristic code tagger
 │   ├── parser/
@@ -118,7 +118,8 @@ dev-cognition-system/
 |-------------|---------|-------|
 | Python | 3.9+ | 3.11 recommended |
 | pip | latest | `python -m pip install --upgrade pip` |
-| Groq account | — | Free tier: ~30 req/min |
+| [Ollama](https://ollama.com) | latest | Runs models locally — install from [ollama.com](https://ollama.com) |
+| GPU (optional) | — | NVIDIA/AMD GPU accelerates inference; CPU-only works too |
 
 ---
 
@@ -149,12 +150,20 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 4. Get your Groq API key
+### 4. Install and start Ollama
 
-1. Go to [https://console.groq.com](https://console.groq.com)
-2. Sign up for a free account
-3. Navigate to **API Keys** → **Create API Key**
-4. Copy the key (it starts with `gsk_`)
+1. Install Ollama from [https://ollama.com](https://ollama.com)
+2. Pull the default model:
+
+```bash
+ollama pull qwen2.5-coder:14b
+```
+
+3. Ollama starts automatically as a service. Verify it's running:
+
+```bash
+curl http://localhost:11434/
+```
 
 ### 5. Configure environment variables
 
@@ -162,11 +171,7 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Edit `.env` and paste your Groq API key:
-
-```env
-GROQ_API_KEY=gsk_your_actual_key_here
-```
+The defaults in `.env.example` work out of the box for a local Ollama setup — no changes required unless you want a different model or vault path.
 
 ---
 
@@ -176,12 +181,12 @@ All settings live in `.env`. Copy `.env.example` to get started.
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `GROQ_API_KEY` | *(required)* | Your Groq API key from [console.groq.com](https://console.groq.com) |
-| `GROQ_MODEL` | `llama-3.1-8b-instant` | LLM model to use for analysis |
-| `GROQ_URL` | `https://api.groq.com/openai/v1/chat/completions` | API endpoint (change for proxy setups) |
-| `GROQ_MIN_INTERVAL` | `12` | Minimum seconds between API calls (free-tier safe) |
+| `OLLAMA_URL` | `http://localhost:11434/v1/chat/completions` | Ollama OpenAI-compatible endpoint |
+| `OLLAMA_MODEL` | `qwen2.5-coder:14b` | Model to use (must be pulled via `ollama pull`) |
+| `OLLAMA_MIN_INTERVAL` | `0` | Minimum seconds between calls (0 = no throttle for local) |
+| `OLLAMA_KEEP_ALIVE` | `-1` | Keep model in VRAM indefinitely (`-1` = never unload) |
 | `VAULT_PATH` | `./vault` | Output directory for generated Obsidian notes |
-| `MOCK_GROQ` | `0` | Set to `1` to use heuristic fallback (no API calls) |
+| `MOCK_LLM` | `0` | Set to `1` to use heuristic fallback (no LLM calls) |
 
 ---
 
@@ -199,7 +204,7 @@ python backend/main.py --source backend/sample.c --vault ./vault
 |------|-------------|
 | `--source <file>` | Path to the `.c` file to analyze |
 | `--vault <dir>` | Output vault directory (default: `./vault`) |
-| `--no-groq` | Save prompts only, skip Groq API calls |
+| `--no-groq` | Save prompts only, skip LLM calls |
 | `--max <n>` | Limit to first N functions |
 | `--skip-existing` | Skip functions that already have notes |
 
@@ -220,7 +225,7 @@ python backend/batch_pipeline.py \
 | `--repo <dir>` | *(required)* | Root of the C/C++ repository to analyze |
 | `--vault <dir>` | `./vault` | Output vault directory |
 | `--workers <n>` | `5` | Number of concurrent worker threads |
-| `--no-groq` | — | Use heuristic fallback, skip API |
+| `--no-groq` | — | Use heuristic fallback, skip LLM |
 | `--skip-existing` | — | Skip already-analyzed functions |
 
 **Example output:**
@@ -239,7 +244,7 @@ Done. 2,145 new notes saved to ./vault
 ### Test with offline/mock mode
 
 ```bash
-MOCK_GROQ=1 python backend/batch_pipeline.py --repo external/llama.cpp --vault ./vault
+MOCK_LLM=1 python backend/batch_pipeline.py --repo external/llama.cpp --vault ./vault
 ```
 
 ---
@@ -332,11 +337,11 @@ pre-allocated buffer.
 ```
 backend/
 ├── ai/
-│   ├── groq_client.py   # Thread-safe Groq client
-│   │                    # • Rate limiting (GROQ_MIN_INTERVAL)
-│   │                    # • Exponential backoff (up to 6 retries)
+│   ├── ollama_client.py # Local Ollama inference client
+│   │                    # • OpenAI-compatible HTTP API
+│   │                    # • Connection retries (up to 3 attempts)
 │   │                    # • JSON response parsing + error recovery
-│   │                    # • Heuristic fallback when API unavailable
+│   │                    # • Heuristic fallback when Ollama unavailable
 │   ├── prompts.py       # Prompt templates for LLM
 │   └── tagger.py        # Regex-based heuristic tagger
 ├── parser/
@@ -355,7 +360,7 @@ backend/
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/my-feature`
 3. Install dev dependencies and make your changes
-4. Test with `MOCK_GROQ=1` to avoid API usage during development
+4. Test with `MOCK_LLM=1` to run fully offline during development
 5. Submit a pull request
 
 ---
@@ -380,11 +385,11 @@ python backend/main.py \
 python backend/batch_pipeline.py \
   --repo external/llama.cpp \
   --vault ./vault \
-  --workers 1 \
+  --workers 5 \
   --skip-existing
 ```
 
-> **Tip:** Use `--workers 1` on the free tier. Multiple workers won't help when the rate limiter serialises calls, and concurrent requests risk bursting the quota.
+> **Tip:** With local Ollama you can use multiple workers freely — there's no cloud rate limit. Tune `--workers` to match your GPU throughput.
 
 ---
 
@@ -393,39 +398,32 @@ python backend/batch_pipeline.py \
 ```
 Scanning 178 C files...
 Found 8432 functions across 178 files
-Vault: ./vault | Workers: 1 | Skip existing: True
+Vault: ./vault | Workers: 5 | Skip existing: True
 
 [1/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_tallocr_alloc.md
 [2/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_dyn_tallocr_new.md
 [3/8432]    Saved vault/ggml-alloc/ggml-alloc.c__ggml_vbuffer_alloc.md
-...
-[429 rate limit] Backing off 10.0s (attempt 2/6)...
-[4/8432]    Saved vault/quants/quants.c__ggml_vec_dot_q4_0_q8_0.md
 ...
 Done. 8432 new notes saved to ./vault
 ```
 
 ---
 
-### 🕐 Rate limit guide
+### 🚀 Performance guide
 
-The Groq free tier allows **~30 requests/minute**. The `GROQ_MIN_INTERVAL` env var controls the delay between calls.
+Speed depends on your hardware. Ollama runs `qwen2.5-coder:14b` fully locally with no cloud rate limits.
 
-| `GROQ_MIN_INTERVAL` | Req / min | Req / hr | Time for ~8 400 functions | Safe? |
-|:-------------------:|:---------:|:--------:|:-------------------------:|:-----:|
-| `2.5s` | 24 | 1 440 | ~6 hrs | ⚠️ Hits limit |
-| `6s` | 10 | 600 | ~14 hrs | ⚠️ Marginal |
-| `10s` | 6 | 360 | ~23 hrs | ✅ Safe |
-| **`12s` ← default** | **5** | **300** | **~28 hrs** | ✅ Recommended |
+| Hardware | Approx tokens/s | Time for ~8 400 functions |
+|----------|:---------------:|:-------------------------:|
+| RTX 4090 (24 GB) | ~80–120 | ~2–3 hrs |
+| RTX 3080 (10 GB) | ~30–50 | ~5–8 hrs |
+| Apple M2 Pro | ~20–35 | ~8–12 hrs |
+| CPU only | ~5–10 | ~24–48 hrs |
 
-Set your preferred interval in `.env`:
-
-```env
-GROQ_MIN_INTERVAL=12   # 5 req/min — safe overnight run
-```
+> **Tip:** Use `--workers 5` (or more) on GPU — local inference parallelises well. For CPU-only, stick to `--workers 1` to avoid memory pressure.
 
 > Run it before you sleep — wake up to a fully annotated codebase. 🌙
 
 ---
 
-*Built with [Groq](https://groq.com) · [Tree-Sitter](https://tree-sitter.github.io) · [Obsidian](https://obsidian.md)*
+*Built with [Ollama](https://ollama.com) · [Tree-Sitter](https://tree-sitter.github.io) · [Obsidian](https://obsidian.md)*
