@@ -1,0 +1,11 @@
+# ggml-zendnn.cpp__ggml_backend_zendnn_reg
+
+Tags: #ggml
+
+## ggml_backend_zendnn_reg
+
+Auto-generated analysis for ggml_backend_zendnn_reg.
+
+
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)

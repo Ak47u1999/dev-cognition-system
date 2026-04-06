@@ -1,0 +1,11 @@
+# httplib.cpp__function_142
+
+Tags: #recursion
+
+## std::all_of
+
+Auto-generated analysis for std::all_of.
+
+- Calls itself — check recursion depth and tail-call possibility.
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)

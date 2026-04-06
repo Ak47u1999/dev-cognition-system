@@ -1,0 +1,11 @@
+# ggml.c__ggml_geglu_quick_split
+
+Tags: #ggml
+
+## ggml_geglu_quick_split
+
+Auto-generated analysis for ggml_geglu_quick_split.
+
+
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)

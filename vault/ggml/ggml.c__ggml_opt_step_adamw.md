@@ -1,0 +1,11 @@
+# ggml.c__ggml_opt_step_adamw
+
+Tags: #ggml
+
+## ggml_opt_step_adamw
+
+Auto-generated analysis for ggml_opt_step_adamw.
+
+
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)

@@ -1,0 +1,11 @@
+# test-alloc.cpp__make_input_1d
+
+Tags: #ggml #memory
+
+## make_input_1d
+
+Auto-generated analysis for make_input_1d.
+
+- Performs heap allocations or raw memory operations.
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)

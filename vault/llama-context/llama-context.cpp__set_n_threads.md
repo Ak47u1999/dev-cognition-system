@@ -1,0 +1,9 @@
+# llama-context.cpp__set_n_threads
+
+## llama_context::set_n_threads
+
+Auto-generated analysis for llama_context::set_n_threads.
+
+
+
+**Note:** Groq API error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=30)
