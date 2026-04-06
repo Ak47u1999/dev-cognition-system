@@ -6,14 +6,14 @@ import re
 from typing import Optional
 import config
 
-from ai.groq_client import query_groq
+from ai.ollama_client import query_ollama, OllamaUnavailableError
 from ai.prompts import build_prompt
 from ai.tagger import tag_code
 from obsidian.writer import save_note, sanitize_title
 from parser.extractor import extract_functions_from_source_bytes
 
 
-def analyze_file(source_path: str, vault_path: str, use_groq: bool = True,
+def analyze_file(source_path: str, vault_path: str, use_llm: bool = True,
                  max_functions: Optional[int] = None, skip_existing: bool = False):
     basename = os.path.basename(source_path)
     file_stem = re.sub(r'[^a-zA-Z0-9_\-]', '_', os.path.splitext(basename)[0])
@@ -49,11 +49,14 @@ def analyze_file(source_path: str, vault_path: str, use_groq: bool = True,
         code = fn.get("code") if isinstance(fn, dict) else str(fn)
         prompt = build_prompt(code, filename=basename)
         result = None
-        if use_groq:
+        if use_llm:
             try:
-                result = query_groq(prompt)
+                result, _ = query_ollama(prompt)
+            except OllamaUnavailableError as e:
+                print(f"\n[pipeline] FATAL: {e}", flush=True)
+                sys.exit(1)
             except Exception as e:
-                print("Groq request failed:", e)
+                print("Ollama request failed:", e)
                 result = None
         if result:
             try:
@@ -78,13 +81,13 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--source", "-s", default="backend/sample.c", help="C source file to analyze")
     p.add_argument("--vault", "-v", default=config.VAULT_PATH, help="Obsidian vault path")
-    p.add_argument("--no-groq", action="store_true", help="Do not call Groq; save prompts instead")
+    p.add_argument("--no-llm", action="store_true", help="Do not call Ollama; save prompts instead")
     p.add_argument("--max", type=int, help="Max functions to process")
     p.add_argument("--skip-existing", action="store_true", default=True, help="Skip functions already saved to vault (default: True)")
     p.add_argument("--no-skip", dest="skip_existing", action="store_false",
                    help="Re-analyze even if note already exists")
     args = p.parse_args()
-    analyze_file(args.source, args.vault, use_groq=not args.no_groq, max_functions=args.max, skip_existing=args.skip_existing)
+    analyze_file(args.source, args.vault, use_llm=not args.no_llm, max_functions=args.max, skip_existing=args.skip_existing)
 
 
 if __name__ == "__main__":

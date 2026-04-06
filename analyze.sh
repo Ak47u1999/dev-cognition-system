@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# analyze.sh — start Ollama + qwen2.5-coder:14b, run analysis, stop Ollama on exit
+# analyze.sh — restart Ollama fresh, load model from .env, run analysis, stop Ollama on exit
 # Usage:
 #   ./analyze.sh                        # default: external/llama.cpp → ./vault
-#   ./analyze.sh --workers 4            # extra args forwarded to batch_pipeline.py
-#   ./analyze.sh --no-groq              # offline / mock run
+#   ./analyze.sh --no-llm               # offline / mock run
 #   ./analyze.sh --repo /path/to/repo   # analyze a different repo
 
 set -euo pipefail
@@ -11,44 +10,47 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-MODEL="qwen2.5-coder:14b"
-OLLAMA_STARTED_BY_US=0
+# ── Load .env so OLLAMA_MODEL and other vars are available in this shell ──────
+if [ -f ".env" ]; then
+    set -a
+    # shellcheck source=.env
+    source .env
+    set +a
+fi
+MODEL="${OLLAMA_MODEL:-qwen2.5-coder:14b}"
 
-# ── Cleanup: stop Ollama only if we started it ────────────────────────────────
+# ── Cleanup: always stop Ollama on exit ──────────────────────────────────────
 cleanup() {
     echo ""
-    if [ "$OLLAMA_STARTED_BY_US" -eq 1 ]; then
-        echo "[analyze] Stopping Ollama service..."
-        sudo -n systemctl stop ollama 2>/dev/null || true
-        echo "[analyze] Ollama stopped."
-    fi
+    echo "[analyze] Stopping Ollama service..."
+    sudo -n systemctl stop ollama 2>/dev/null || true
+    echo "[analyze] Ollama stopped."
 }
 trap cleanup EXIT INT TERM
 
-# ── Start Ollama via systemctl if not already running ────────────────────────
-if systemctl is-active --quiet ollama; then
-    echo "[analyze] Ollama service already running — using existing instance."
-else
-    echo "[analyze] Starting Ollama service..."
-    sudo -n systemctl start ollama
-    OLLAMA_STARTED_BY_US=1
+# ── Always restart Ollama for a clean state (avoids port timeout issues) ─────
+echo "[analyze] Restarting Ollama service..."
+sudo -n systemctl stop ollama 2>/dev/null || true
+sleep 2
+# Inject keep-alive so model stays in VRAM during long file scans
+sudo -n systemctl set-environment OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:--1}"
+sudo -n systemctl start ollama
 
-    # Wait for API to be ready (up to 30s)
-    echo -n "[analyze] Waiting for Ollama API"
-    for i in $(seq 1 30); do
-        if curl -sf http://localhost:11434/ > /dev/null 2>&1; then
-            echo " ready."
-            break
-        fi
-        echo -n "."
-        sleep 1
-        if [ "$i" -eq 30 ]; then
-            echo ""
-            echo "[analyze] ERROR: Ollama did not start in 30s. Check: journalctl -u ollama -n 20"
-            exit 1
-        fi
-    done
-fi
+# Wait for API to be ready (up to 30s)
+echo -n "[analyze] Waiting for Ollama API"
+for i in $(seq 1 30); do
+    if curl -sf http://localhost:11434/ > /dev/null 2>&1; then
+        echo " ready."
+        break
+    fi
+    echo -n "."
+    sleep 1
+    if [ "$i" -eq 30 ]; then
+        echo ""
+        echo "[analyze] ERROR: Ollama did not start in 30s. Check: journalctl -u ollama -n 20"
+        exit 1
+    fi
+done
 
 # ── Verify model is available ─────────────────────────────────────────────────
 if ! ollama list 2>/dev/null | grep -q "$MODEL"; then
@@ -60,24 +62,8 @@ fi
 echo "[analyze] Loading $MODEL into GPU VRAM..."
 curl -sf http://localhost:11434/v1/chat/completions \
     -H "Content-Type: application/json" \
-    -d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":1}" \
+    -d "{\"model\":\"$MODEL\",\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}],\"max_tokens\":1,\"keep_alive\":-1}" \
     > /dev/null 2>&1 && echo "[analyze] Model loaded." || echo "[analyze] Warmup skipped."
-
-# ── Monitor Ollama health in background — abort if it dies ───────────────────
-SCRIPT_PID=$$
-(
-    while true; do
-        sleep 5
-        if ! systemctl is-active --quiet ollama; then
-            echo ""
-            echo "[analyze] ERROR: Ollama service died unexpectedly. Aborting."
-            kill $SCRIPT_PID 2>/dev/null || true
-            exit 1
-        fi
-    done
-) &
-MONITOR_PID=$!
-trap "kill $MONITOR_PID 2>/dev/null; cleanup" EXIT INT TERM
 
 # ── Activate virtualenv if present ───────────────────────────────────────────
 if [ -f "venv/bin/activate" ]; then
@@ -89,7 +75,6 @@ echo "[analyze] Starting batch analysis..."
 python3 backend/batch_pipeline.py \
     --repo external/llama.cpp \
     --vault ./vault \
-    --workers 1 \
     --skip-existing \
     "$@"
 

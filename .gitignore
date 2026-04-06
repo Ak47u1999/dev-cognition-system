@@ -33,7 +33,7 @@ backend/build/
 external/
 
 # Generated vault output — examples are committed; add your own to vault/
-# vault/
+vault/
 
 # Jupyter
 .ipynb_checkpoints/

@@ -5,14 +5,13 @@
 #   1. Checks Python 3 is available
 #   2. Creates a virtualenv (venv/) if one doesn't exist
 #   3. Installs / upgrades Python dependencies from requirements.txt
-#   4. Creates .env pre-configured for local Ollama (qwen2.5-coder:14b)
+#   4. Creates .env pre-configured for local Ollama (model set via OLLAMA_MODEL in .env)
 #   5. Clones external/llama.cpp if missing, or pulls latest if already present
 #   6. Hands off to analyze.sh (all extra args are forwarded)
 #
 # Usage:
 #   ./init.sh                   # full setup + analyze
-#   ./init.sh --no-groq         # setup + offline/mock run
-#   ./init.sh --workers 4       # setup + analyze with 4 workers
+#   ./init.sh --no-llm          # setup + offline/mock run
 
 set -euo pipefail
 
@@ -73,22 +72,19 @@ success "Dependencies ready."
 
 # ── 4. .env setup ────────────────────────────────────────────────────────────
 if [ ! -f ".env" ]; then
-    warn ".env not found — our .env is pre-configured for local Ollama."
-    cp .env.example .env
-
-    # Overwrite with local Ollama settings
+    warn ".env not found — creating with local Ollama settings."
     cat > .env << 'ENVEOF'
 # Local Ollama — OpenAI-compatible endpoint
-GROQ_API_KEY=ollama
-GROQ_URL=http://localhost:11434/v1/chat/completions
-GROQ_MODEL=qwen2.5-coder:14b
-GROQ_MIN_INTERVAL=0
+OLLAMA_URL=http://localhost:11434/v1/chat/completions
+OLLAMA_MODEL=qwen2.5-coder:14b
+OLLAMA_MIN_INTERVAL=0
+OLLAMA_KEEP_ALIVE=-1
 
 # Output vault
 VAULT_PATH=./vault
 
 # Set to 1 to skip LLM calls and use heuristic fallback
-MOCK_GROQ=0
+MOCK_LLM=0
 ENVEOF
     success ".env created with local Ollama settings."
 else

@@ -4,16 +4,14 @@ Batch pipeline: analyze all C files in a repository and save Obsidian notes.
 
 Usage:
     python backend/batch_pipeline.py --repo external/llama.cpp --vault ./vault
-    python backend/batch_pipeline.py --repo external/llama.cpp --workers 5 --skip-existing
+    python backend/batch_pipeline.py --repo external/llama.cpp --skip-existing
 """
 import os
 import sys
 import re
 import json
 import argparse
-import threading
 import warnings
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Suppress FutureWarning from tree-sitter
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -21,27 +19,23 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 sys.path.insert(0, os.path.dirname(__file__))
 import config
 
-from ai.groq_client import query_groq
+from ai.ollama_client import query_ollama, OllamaUnavailableError
 from ai.prompts import build_prompt
 from ai.tagger import tag_code
 from obsidian.writer import save_note, sanitize_title
 
-_print_lock = threading.Lock()
-_counter_lock = threading.Lock()
 _done = 0
 _total = 0
 
 
 def _log(msg: str):
-    with _print_lock:
-        print(msg, flush=True)
+    print(msg, flush=True)
 
 
 def _increment_done():
     global _done
-    with _counter_lock:
-        _done += 1
-        return _done
+    _done += 1
+    return _done
 
 
 def find_c_files(repo_path: str, skip_dirs: set = None) -> list:
@@ -71,7 +65,7 @@ def extract_functions_from_file(source_path: str) -> list:
 
 
 def process_function(source_path: str, fn: dict, index: int,
-                     vault_path: str, use_groq: bool, skip_existing: bool) -> str | None:
+                     vault_path: str, use_llm: bool, skip_existing: bool) -> str | None:
     basename = os.path.basename(source_path)
     file_stem = re.sub(r"[^a-zA-Z0-9_\-]", "_", os.path.splitext(basename)[0])
     file_vault = os.path.join(vault_path, file_stem)
@@ -90,11 +84,15 @@ def process_function(source_path: str, fn: dict, index: int,
     code = fn.get("code") if isinstance(fn, dict) else str(fn)
     prompt = build_prompt(code, filename=basename)
     result = None
-    if use_groq:
+    tps = None
+    if use_llm:
         try:
-            result = query_groq(prompt)
+            result, tps = query_ollama(prompt)
+        except OllamaUnavailableError as e:
+            print(f"\n[pipeline] FATAL: {e}", flush=True)
+            sys.exit(1)
         except Exception as e:
-            _log(f"  Groq error for {title}: {e}")
+            _log(f"  Ollama error for {title}: {e}")
 
     if result:
         try:
@@ -111,11 +109,12 @@ def process_function(source_path: str, fn: dict, index: int,
 
     path = save_note(title, md, vault_path=file_vault)
     done = _increment_done()
-    _log(f"[{done}/{_total}] Saved {path}")
+    tps_str = f"  {tps:.1f} tok/s" if tps is not None else ""
+    _log(f"[{done}/{_total}] Saved {path}{tps_str}")
     return path
 
 
-def process_file(source_path: str, vault_path: str, use_groq: bool,
+def process_file(source_path: str, vault_path: str, use_llm: bool,
                  skip_existing: bool) -> list:
     funcs = extract_functions_from_file(source_path)
     saved = []
@@ -134,9 +133,7 @@ def main():
     p.add_argument("--vault", "-v",
                    default=config.VAULT_PATH,
                    help="Obsidian vault output directory")
-    p.add_argument("--workers", "-w", type=int, default=1,
-                   help="Number of concurrent Groq workers (default: 1; rate-lock serialises anyway)")
-    p.add_argument("--no-groq", action="store_true", help="Save prompts only, skip Groq calls")
+    p.add_argument("--no-llm", action="store_true", help="Save prompts only, skip Ollama calls")
     p.add_argument("--skip-existing", action="store_true", default=True,
                    help="Skip functions already saved to vault (default: True)")
     p.add_argument("--no-skip", dest="skip_existing", action="store_false",
@@ -158,25 +155,18 @@ def main():
 
     _total = len(all_tasks)
     print(f"Found {_total} functions across {len(c_files)} files")
-    print(f"Vault: {args.vault} | Workers: {args.workers} | Skip existing: {args.skip_existing}\n")
+    print(f"Vault: {args.vault} | Skip existing: {args.skip_existing}\n")
 
-    use_groq = not args.no_groq
+    use_llm = not args.no_llm
     saved_count = 0
 
-    with ThreadPoolExecutor(max_workers=args.workers) as executor:
-        futures = {
-            executor.submit(process_function, path, fn, idx,
-                            args.vault, use_groq, args.skip_existing): (path, idx)
-            for path, fn, idx in all_tasks
-        }
-        for future in as_completed(futures):
-            try:
-                result = future.result()
-                if result:
-                    saved_count += 1
-            except Exception as e:
-                src, idx = futures[future]
-                _log(f"  ERROR processing {src} function {idx}: {e}")
+    for path, fn, idx in all_tasks:
+        try:
+            result = process_function(path, fn, idx, args.vault, use_llm, args.skip_existing)
+            if result:
+                saved_count += 1
+        except Exception as e:
+            _log(f"  ERROR processing {path} function {idx}: {e}")
 
     print(f"\nDone. {saved_count} new notes saved to {args.vault}")
 

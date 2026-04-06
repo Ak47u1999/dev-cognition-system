@@ -19,12 +19,11 @@ def _require(key: str) -> str:
     return val
 
 
-# ── Groq ──────────────────────────────────────────────────────────────────────
-GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
-GROQ_URL: str = os.getenv("GROQ_URL", "https://api.groq.com/openai/v1/chat/completions")
-GROQ_MODEL: str = os.getenv("GROQ_MODEL", "qwen/qwen3-32b")
-GROQ_MIN_INTERVAL: float = float(os.getenv("GROQ_MIN_INTERVAL", "10"))
-MOCK_GROQ: bool = os.getenv("MOCK_GROQ", "0").lower() in ("1", "true", "yes")
+# ── Ollama ────────────────────────────────────────────────────────────────────
+OLLAMA_URL: str = os.getenv("OLLAMA_URL", "http://localhost:11434/v1/chat/completions")
+OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:14b")
+OLLAMA_MIN_INTERVAL: float = float(os.getenv("OLLAMA_MIN_INTERVAL", "0"))
+MOCK_LLM: bool = os.getenv("MOCK_LLM", "0").lower() in ("1", "true", "yes")
 
 # ── Vault ─────────────────────────────────────────────────────────────────────
 VAULT_PATH: str = os.getenv("VAULT_PATH", str(Path.cwd() / "vault"))
